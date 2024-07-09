@@ -1,8 +1,11 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+val dockerUserName: String? = System.getenv("DOCKER_HUB_ID")
+val dockerPassword: String? = System.getenv("DOCKER_HUB_PASSWORD")
 val activeProfile = System.getenv("PROFILE") ?: "dev"
-val imageTag = System.getenv("IMAGE_TAG") ?: "latest"
 val repoURL: String? = System.getenv("IMAGE_REPO_URL")
+val deployPort: String? = System.getenv("DEPLOY_PORT")
+val imageTag = "latest"
 
 plugins {
     id("org.springframework.boot") version "3.2.3"
@@ -75,14 +78,18 @@ jib {
     to {
         image = repoURL
         tags = setOf(imageTag)
+        auth {
+            username = dockerUserName
+            password = dockerPassword
+        }
     }
     container {
         jvmFlags =
             listOf(
                 "-Dspring.profiles.active=$activeProfile",
-                "-Dserver.port=8080",
+                "-Dserver.port=$deployPort",
                 "-XX:+UseContainerSupport",
             )
-        ports = listOf("8080")
+        ports = listOf(deployPort)
     }
 }

@@ -29,19 +29,17 @@ jobs:
         run: ./gradlew test
 
       - name: Build and push Docker image
-        run: ./gradlew clean bootBuildImage -PDOCKERHUB_ID=${{ secrets.DOCKERHUB_ID }} -PDOCKERHUB_TOKEN=${{ secrets.DOCKERHUB_TOKEN }}
+        run: ./gradlew jib
 
       - name: SSH into EC2 instance
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
-          password: ${{ secrets.EC2_PASSWORD }}
+          key: ${{ secrets.EC2_KEY }}
           port: ${{ secrets.EC2_SSH_PORT }}
           script: |
             docker pull ${{ secrets.DEV_DOCKER_HUB_URL }}
-            docker ps -f name=be-server -q | xargs --no-run-if-empty docker container stop
-            docker ps -a -f name=be-server -q | xargs --no-run-if-empty docker container rm
-            docker run -d --name be-server -p 80:8080 \
-                -e GOOGLE_APPLICATION_CREDENTIALS="${HOME}/key.json" \
-                ${{ secrets.DEV_DOCKER_HUB_URL }}
+            docker ps -f name=ggsdh-api -q | xargs --no-run-if-empty docker container stop
+            docker ps -a -f name=ggsdh-api -q | xargs --no-run-if-empty docker container rm
+            docker run -d --name ggsdh-api -p 8080:8080 ${{ secrets.DEV_DOCKER_HUB_URL }}
