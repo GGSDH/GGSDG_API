@@ -38,7 +38,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build and push Docker image
-        run: ./gradlew jib --stacktrace
+        run: ./gradlew jib
 
       - name: SSH into EC2 instance
         uses: appleboy/ssh-action@master
