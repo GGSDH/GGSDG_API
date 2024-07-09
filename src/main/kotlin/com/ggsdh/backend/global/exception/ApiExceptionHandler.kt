@@ -27,6 +27,7 @@ class ApiExceptionHandler(private val log: Logger) {
         return ErrorResponse(GlobalError.INVALID_REQUEST_PARAM)
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(BusinessException::class)
     fun handleBusinessException(exception: BusinessException): ResponseEntity<ErrorResponse?> {
         logBusinessException(exception)
