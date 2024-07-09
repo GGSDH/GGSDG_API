@@ -1,13 +1,13 @@
 package com.ggsdh.backend.global.view
 
-import org.springframework.http.ResponseEntity
+import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RestController
+import java.util.*
 
-@RestController
+@Controller
 class HomeController {
     @GetMapping("/")
-    fun getHomePage(): ResponseEntity<Unit> {
-        return ResponseEntity.ok().build()
+    fun getHomePage(locale: Locale): String {
+        return "home"
     }
 }
