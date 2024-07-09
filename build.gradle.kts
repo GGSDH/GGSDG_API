@@ -1,10 +1,14 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-val dockerUserName: String? = System.getenv("DOCKER_HUB_ID")
-val dockerPassword: String? = System.getenv("DOCKER_HUB_PASSWORD")
-val activeProfile = System.getenv("PROFILE") ?: "dev"
-val repoURL: String? = System.getenv("IMAGE_REPO_URL")
-val deployPort: String? = System.getenv("DEPLOY_PORT")
+val dockerUserName: String = System.getenv("DOCKER_HUB_ID")
+        ?: throw IllegalArgumentException("DOCKER_HUB_ID environment variable not set")
+val dockerPassword: String = System.getenv("DOCKER_HUB_PASSWORD")
+        ?: throw IllegalArgumentException("DOCKER_HUB_PASSWORD environment variable not set")
+val activeProfile: String = System.getenv("PROFILE") ?: "dev"
+val repoURL: String = System.getenv("IMAGE_REPO_URL")
+        ?: throw IllegalArgumentException("IMAGE_REPO_URL environment variable not set")
+val deployPort: String = System.getenv("DEPLOY_PORT")
+        ?: throw IllegalArgumentException("DEPLOY_PORT environment variable not set")
 val imageTag = "latest"
 
 plugins {
@@ -73,7 +77,7 @@ tasks.register<Copy>("initConfig") {
 
 jib {
     from {
-        image = "amazoncorretto:17-alpine3.18"
+        image = "$repoURL:$imageTag"
     }
     to {
         image = repoURL
