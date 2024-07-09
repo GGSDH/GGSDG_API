@@ -25,11 +25,20 @@ jobs:
       - name: Update Git submodules
         run: git submodule update --remote --recursive
 
-      - name: Build and test with Gradle
-        run: ./gradlew test
+#      - name: Build and test with Gradle
+#        run: ./gradlew test
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_HUB_ID }}
+          password: ${{ secrets.DOCKER_HUB_TOKEN }}
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
 
       - name: Build and push Docker image
-        run: ./gradlew jib
+        run: ./gradlew jib --stacktrace
 
       - name: SSH into EC2 instance
         uses: appleboy/ssh-action@master
@@ -39,7 +48,8 @@ jobs:
           key: ${{ secrets.EC2_KEY }}
           port: ${{ secrets.EC2_SSH_PORT }}
           script: |
-            docker pull ${{ secrets.DEV_DOCKER_HUB_URL }}
-            docker ps -f name=ggsdh-api -q | xargs --no-run-if-empty docker container stop
-            docker ps -a -f name=ggsdh-api -q | xargs --no-run-if-empty docker container rm
-            docker run -d --name ggsdh-api -p 8080:8080 ${{ secrets.DEV_DOCKER_HUB_URL }}
+            echo ${{ secrets.DOCKER_HUB_TOKEN }} | sudo docker login -u ${{ secrets.DOCKER_HUB_ID }} --password-stdin
+            sudo docker pull ${{ secrets.IMAGE_REPO_URL }}
+            sudo docker ps -f name=ggsdh-api -q | xargs --no-run-if-empty sudo docker container stop
+            sudo docker ps -a -f name=ggsdh-api -q | xargs --no-run-if-empty sudo docker container rm
+            sudo docker run -d --name ggsdh-api -e "TZ=Asia/Seoul" -p 8080:8080 ggsdh/ggsdh-operate

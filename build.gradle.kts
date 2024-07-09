@@ -1,16 +1,5 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-val dockerUserName: String = System.getenv("DOCKER_HUB_ID")
-        ?: throw IllegalArgumentException("DOCKER_HUB_ID environment variable not set")
-val dockerPassword: String = System.getenv("DOCKER_HUB_PASSWORD")
-        ?: throw IllegalArgumentException("DOCKER_HUB_PASSWORD environment variable not set")
-val activeProfile: String = System.getenv("PROFILE") ?: "dev"
-val repoURL: String = System.getenv("IMAGE_REPO_URL")
-        ?: throw IllegalArgumentException("IMAGE_REPO_URL environment variable not set")
-val deployPort: String = System.getenv("DEPLOY_PORT")
-        ?: throw IllegalArgumentException("DEPLOY_PORT environment variable not set")
-val imageTag = "latest"
-
 plugins {
     id("org.springframework.boot") version "3.2.3"
     id("io.spring.dependency-management") version "1.1.4"
@@ -40,8 +29,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-//    implementation("org.flywaydb:flyway-core")
-//    implementation("org.flywaydb:flyway-mysql")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     runtimeOnly("com.mysql:mysql-connector-j")
@@ -77,23 +64,17 @@ tasks.register<Copy>("initConfig") {
 
 jib {
     from {
-        image = "$repoURL:$imageTag"
+        image = "amazoncorretto:17-alpine3.18"
     }
     to {
-        image = repoURL
-        tags = setOf(imageTag)
-        auth {
-            username = dockerUserName
-            password = dockerPassword
-        }
-    }
-    container {
-        jvmFlags =
-            listOf(
-                "-Dspring.profiles.active=$activeProfile",
-                "-Dserver.port=$deployPort",
-                "-XX:+UseContainerSupport",
+        image = "ggsdh/ggsdh-operate:latest"
+        container {
+            jvmFlags = listOf(
+                    "-Dspring.profiles.active=real",
+                    "-Dserver.port=8080",
+                    "-XX:+UseContainerSupport"
             )
-        ports = listOf(deployPort)
+            ports = listOf("8080")
+        }
     }
 }
