@@ -9,9 +9,9 @@ import org.springframework.stereotype.Component
 class CustomRequestMatcher {
     fun authEndpoints(): RequestMatcher {
         return OrRequestMatcher(
-            AntPathRequestMatcher("/"),
+            AntPathRequestMatcher("/"), // Actuator Health Checker
+            AntPathRequestMatcher("/api/v1/oauth/**/**"), // Oauth Login
             AntPathRequestMatcher("/api/v1/actuator"),
-            AntPathRequestMatcher("/api/v1/oauth/**"), // Oauth Login
         )
     }
 
