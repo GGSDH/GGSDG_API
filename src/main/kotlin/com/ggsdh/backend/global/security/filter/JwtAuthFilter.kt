@@ -41,9 +41,9 @@ class JwtAuthFilter(
                 )
             val authenticationToken = AnonymousAuthenticationToken("guest", principal, setOf(authority))
             SecurityContextHolder.getContext().authentication = authenticationToken
-            chain.doFilter(request, response)
             log.info("{}({}) - ({}) {}", principal.username, principal.authorities, request.method, request.requestURL)
-            return
+
+            return chain.doFilter(request, response)
         }
         val authentication = jwtFactory.getAuthentication(token)
         SecurityContextHolder.getContext().authentication = authentication
