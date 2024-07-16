@@ -10,6 +10,7 @@ import com.ggsdh.backend.member.infrastructure.persistence.MemberRepository
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Component
 
+@Suppress("NAME_SHADOWING")
 @Component
 @Transactional
 class AuthService(
@@ -36,20 +37,11 @@ class AuthService(
             )
 
         if (member == null) {
-            val savedMember =
-                memberRepository.save(
-                    Member(
-                        id = null,
-                        role = Role.ROLE_TEMP_USER,
-                        memberIdentification = identification,
-                    ),
-                )
-
-            val token = jwtFactory.createAccessToken(savedMember)
-            return token
+            val member = Member(Role.ROLE_TEMP_USER, identification)
+            val savedMember = memberRepository.save(member)
+            return jwtFactory.createAccessToken(savedMember)
         }
 
-        val token = jwtFactory.createAccessToken(member)
-        return token
+        return jwtFactory.createAccessToken(member)
     }
 }

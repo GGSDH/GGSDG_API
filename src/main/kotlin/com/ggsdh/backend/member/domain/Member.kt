@@ -6,15 +6,26 @@ import com.ggsdh.backend.global.auditing.BaseEntity
 import jakarta.persistence.*
 
 @Entity
-@Table(name = "t_member")
+@Table(name = "TB_MEMBER")
 class Member(
-    @Id
-    @GeneratedValue
-    @Column(name = "member_id")
-    val id: Long?,
-    @Enumerated(EnumType.STRING) val role: Role,
+    @Enumerated(EnumType.STRING)
+    var role: Role,
+
     @OneToOne(
         cascade = [CascadeType.PERSIST, CascadeType.REMOVE],
-        orphanRemoval = true,
-    ) val memberIdentification: MemberIdentification,
-) : BaseEntity()
+        orphanRemoval = true
+    )
+    val memberIdentification: MemberIdentification,
+) : BaseEntity() {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "member_id")
+    val id: Long? = null
+
+    fun updateRole(role: Role) {
+        this.role = role
+    }
+}
+
+
