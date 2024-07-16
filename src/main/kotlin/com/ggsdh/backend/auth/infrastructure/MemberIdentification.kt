@@ -5,6 +5,7 @@ import com.ggsdh.backend.member.domain.Member
 import jakarta.persistence.*
 
 @Entity
+@Table(name = "TB_MEMBER_IDENTIFICATION")
 class MemberIdentification(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long?,
