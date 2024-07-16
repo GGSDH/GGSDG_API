@@ -9,7 +9,7 @@ class MemberIdentification(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long?,
     @Column
-    val type: ProviderType,
+    var type: ProviderType,
     @Column(unique = true)
     var kakaoId: Long?,
     @Column(unique = true)

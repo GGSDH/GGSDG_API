@@ -3,8 +3,9 @@ package com.ggsdh.backend.member.infrastructure.persistence
 import com.ggsdh.backend.auth.infrastructure.MemberIdentification
 import com.ggsdh.backend.member.domain.Member
 import org.springframework.data.jpa.repository.JpaRepository
-import java.util.*
+import org.springframework.stereotype.Repository
 
-interface MemberRepository : JpaRepository<Member, UUID> {
+@Repository
+interface MemberRepository : JpaRepository<Member, Long> {
     fun findByMemberIdentification(memberIdentification: MemberIdentification): Member?
 }
