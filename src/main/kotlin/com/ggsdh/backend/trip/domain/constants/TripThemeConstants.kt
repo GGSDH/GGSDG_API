@@ -1,8 +1,5 @@
 package com.ggsdh.backend.trip.domain.constants
 
-import com.ggsdh.backend.member.domain.Member
-import com.ggsdh.backend.trip.domain.TripTheme
-
 enum class TripThemeConstants {
     ACTIVITIES,
     SNS_HOT_SPOTS,

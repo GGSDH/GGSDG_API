@@ -5,7 +5,7 @@ import com.ggsdh.backend.auth.application.dto.request.LoginRequest
 import com.ggsdh.backend.auth.application.dto.response.AuthResponse
 import com.ggsdh.backend.auth.domain.constants.ProviderType
 import com.ggsdh.backend.auth.presentation.dto.KakaoLoginRequest
-import com.ggsdh.backend.global.dto.Response
+import com.ggsdh.backend.global.dto.BaseResponse
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -17,7 +17,7 @@ class OAuthController(
     fun kakaoLogin(
         @PathVariable provider: String,
         @RequestBody request: KakaoLoginRequest,
-    ): Response<AuthResponse> {
+    ): BaseResponse<AuthResponse> {
         val token =
             authService.login(
                 LoginRequest(
@@ -27,7 +27,7 @@ class OAuthController(
                 ),
             )
 
-        return Response.success(
+        return BaseResponse.success(
             AuthResponse.of(token),
         )
     }

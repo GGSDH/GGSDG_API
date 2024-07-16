@@ -25,13 +25,6 @@ data class ErrorResponse(
         details = details,
     )
 
-    constructor(
-        fieldError: FieldError?,
-    ) : this(
-        errorCode = fieldError?.code ?: "",
-        errorMessage = fieldError?.defaultMessage ?: "",
-    )
-
     constructor(fieldErrors: List<FieldError>) : this(
         GlobalError.INVALID_REQUEST_PARAM,
         fieldErrors.associate {

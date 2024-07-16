@@ -5,28 +5,28 @@ import com.ggsdh.backend.member.domain.Member
 import com.ggsdh.backend.member.exception.MemberError
 import com.ggsdh.backend.member.infrastructure.persistence.MemberRepository
 import com.ggsdh.backend.trip.application.dto.request.OnboardingRequest
-import com.ggsdh.backend.trip.domain.TripTheme
-import com.ggsdh.backend.trip.domain.constants.TripThemeConstants
-import com.ggsdh.backend.trip.infrastructure.TripThemeRepository
+import com.ggsdh.backend.trip.domain.TripMate
+import com.ggsdh.backend.trip.domain.constants.TripMateConstants
+import com.ggsdh.backend.trip.infrastructure.TripMateRepository
 import org.springframework.stereotype.Service
 
 @Service
-class TripThemeService(
+class TripMateService(
     val memberRepository: MemberRepository,
-    val tripThemeRepository: TripThemeRepository
+    val tripMateRepository: TripMateRepository
 ) {
-    fun updateTripThemes(onboardingRequest: OnboardingRequest) {
+    fun updateTripMates(onboardingRequest: OnboardingRequest) {
         val member = memberRepository.findById(onboardingRequest.memberId)
             .orElseThrow { BusinessException(MemberError.NOT_FOUND) }
 
-        val tripThemes = generateTripThemes(member, onboardingRequest.tripThemes)
-        tripThemeRepository.saveAll(tripThemes)
+        val tripMates = generateTripMates(member, onboardingRequest.tripMateConstants)
+        tripMateRepository.saveAll(tripMates)
     }
 
-    private fun generateTripThemes(
+    private fun generateTripMates(
         member: Member,
-        tripThemeConstants: List<TripThemeConstants>
-    ): List<TripTheme> {
-        return tripThemeConstants.map { TripTheme(member, it) }.toList()
+        tripMateConstants: List<TripMateConstants>
+    ): List<TripMate> {
+        return tripMateConstants.map { TripMate(member, it) }.toList()
     }
 }

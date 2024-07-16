@@ -6,7 +6,7 @@ import com.ggsdh.backend.global.auditing.BaseEntity
 import jakarta.persistence.*
 
 @Entity
-@Table(name = "t_member")
+@Table(name = "TB_MEMBER")
 class Member(
     @Enumerated(EnumType.STRING)
     var role: Role,
@@ -19,7 +19,7 @@ class Member(
 ) : BaseEntity() {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
     val id: Long? = null
 
