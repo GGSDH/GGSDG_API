@@ -24,31 +24,32 @@ class AuthService(
                 loginRequest.providerType,
             )
 
-        val id =
+        val identification =
             memberIdentificationService.toMemberIdentification(
                 loginRequest.accessToken,
                 loginRequest.refreshToken,
             )
+
         val member =
             memberIdentificationRepository.findMemberByIdentification(
-                id,
+                identification,
             )
 
-        if (member != null) {
-            val token = jwtFactory.createAccessToken(member)
-            return token
-        } else {
-            val member =
-                Member(
-                    id = null,
-                    role = Role.ROLE_TEMP_USER,
-                    memberIdentification = id,
+        if (member == null) {
+            val savedMember =
+                memberRepository.save(
+                    Member(
+                        id = null,
+                        role = Role.ROLE_TEMP_USER,
+                        memberIdentification = identification,
+                    ),
                 )
 
-            memberRepository.save(member)
-
-            val token = jwtFactory.createAccessToken(member)
+            val token = jwtFactory.createAccessToken(savedMember)
             return token
         }
+
+        val token = jwtFactory.createAccessToken(member)
+        return token
     }
 }

@@ -3,8 +3,8 @@ package com.ggsdh.backend.global.exception
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.ggsdh.backend.global.exception.error.BusinessException
 import com.ggsdh.backend.global.exception.error.ErrorResponse
+import com.ggsdh.backend.global.exception.error.GlobalError
 import jakarta.servlet.FilterChain
-import jakarta.servlet.ServletException
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.MediaType
@@ -16,7 +16,6 @@ import java.io.IOException
 class ApiExceptionHandlingFilter(
     private val om: ObjectMapper,
 ) : OncePerRequestFilter() {
-    @Throws(ServletException::class, IOException::class)
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
@@ -26,6 +25,8 @@ class ApiExceptionHandlingFilter(
             chain.doFilter(request, response)
         } catch (exception: BusinessException) {
             setErrorResponse(response, exception)
+        } catch (exception: Exception) {
+            setErrorResponse(response, BusinessException(GlobalError.INTERNAL_SERVER_ERROR))
         }
     }
 
