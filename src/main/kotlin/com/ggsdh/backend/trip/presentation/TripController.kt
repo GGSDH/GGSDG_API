@@ -5,6 +5,8 @@ import com.ggsdh.backend.global.security.annotation.AuthId
 import com.ggsdh.backend.trip.application.TripMateService
 import com.ggsdh.backend.trip.application.TripThemeService
 import com.ggsdh.backend.trip.application.dto.request.OnboardingRequest
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.PostMapping
@@ -20,6 +22,8 @@ class TripController(
 ) {
 
     @PostMapping("/trip/onboarding")
+    @Tag(name = "Onboarding API")
+    @Operation(summary = "온보딩 생성", description = "온보딩 정보를 생성합니다.")
     fun updateOnboardingInfo(
         @AuthId id: Long,
         @RequestBody onboardingRequest: OnboardingRequest
