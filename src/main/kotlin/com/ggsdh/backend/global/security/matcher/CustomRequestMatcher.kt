@@ -11,10 +11,7 @@ class CustomRequestMatcher {
         return OrRequestMatcher(
             AntPathRequestMatcher("/"), // Actuator Health Checker
             AntPathRequestMatcher("/api/v1/oauth/**/**"), // Oauth Login
-            AntPathRequestMatcher("/api/v1/actuator"),
-            AntPathRequestMatcher("/v1/api-docs"),
-            AntPathRequestMatcher("/swagger-ui/**"),
-            AntPathRequestMatcher("/ggsdh-api-docs/**"),
+            AntPathRequestMatcher("/api/v1/actuator")
         )
     }
 
