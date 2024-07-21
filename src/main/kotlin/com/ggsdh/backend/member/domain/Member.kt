@@ -10,14 +10,13 @@ import jakarta.persistence.*
 class Member(
     @Enumerated(EnumType.STRING)
     var role: Role,
-
     @OneToOne(
         cascade = [CascadeType.PERSIST, CascadeType.REMOVE],
-        orphanRemoval = true
+        orphanRemoval = true,
     )
     val memberIdentification: MemberIdentification,
+    var nickname: String,
 ) : BaseEntity() {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
@@ -27,5 +26,3 @@ class Member(
         this.role = role
     }
 }
-
-

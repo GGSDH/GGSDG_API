@@ -6,6 +6,7 @@ import com.ggsdh.backend.auth.infrastructure.MemberIdentificationRepository
 import com.ggsdh.backend.auth.infrastructure.MemberIdentificationServiceFactory
 import com.ggsdh.backend.global.security.jwt.JwtFactory
 import com.ggsdh.backend.member.domain.Member
+import com.ggsdh.backend.member.domain.Nickname
 import com.ggsdh.backend.member.infrastructure.persistence.MemberRepository
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Component
@@ -37,7 +38,8 @@ class AuthService(
             )
 
         if (member == null) {
-            val member = Member(Role.ROLE_TEMP_USER, identification)
+            val nickname = Nickname.generate()
+            val member = Member(Role.ROLE_TEMP_USER, identification, nickname.value)
             val savedMember = memberRepository.save(member)
             return jwtFactory.createAccessToken(savedMember)
         }
