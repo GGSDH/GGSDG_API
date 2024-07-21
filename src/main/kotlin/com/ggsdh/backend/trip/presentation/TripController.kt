@@ -18,19 +18,17 @@ import org.springframework.web.bind.annotation.RequestMapping
 @RequestMapping("/api/v1")
 class TripController(
     val tripThemeService: TripThemeService,
-    val tripMateService: TripMateService
+    val tripMateService: TripMateService,
 ) {
-
     @PostMapping("/trip/onboarding")
     @Tag(name = "Onboarding API")
     @Operation(summary = "온보딩 생성", description = "온보딩 정보를 생성합니다.")
     fun updateOnboardingInfo(
         @AuthId id: Long,
-        @RequestBody onboardingRequest: OnboardingRequest
+        @RequestBody onboardingRequest: OnboardingRequest,
     ): BaseResponse<Any> {
         tripThemeService.updateTripThemes(onboardingRequest)
-        tripMateService.updateTripMates(onboardingRequest)
 
-        return BaseResponse.success(null);
+        return BaseResponse.success(null)
     }
 }
