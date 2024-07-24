@@ -12,20 +12,27 @@ import org.springframework.stereotype.Service
 
 @Service
 class TripThemeService(
-    val memberRepository: MemberRepository,
-    val tripThemeRepository: TripThemeRepository
+        val memberRepository: MemberRepository,
+        val tripThemeRepository: TripThemeRepository
 ) {
-    fun updateTripThemes(onboardingRequest: OnboardingRequest) {
-        val member = memberRepository.findById(onboardingRequest.memberId)
-            .orElseThrow { BusinessException(MemberError.NOT_FOUND) }
+    fun getOnboardingThemes(): List<TripThemeConstants> {
+        return TripThemeConstants.entries
+    }
+
+    fun updateTripThemes(
+            id: Long,
+            onboardingRequest: OnboardingRequest
+    ) {
+        val member = memberRepository.findById(id)
+                .orElseThrow { BusinessException(MemberError.NOT_FOUND) }
 
         val tripThemes = generateTripThemes(member, onboardingRequest.tripThemes)
         tripThemeRepository.saveAll(tripThemes)
     }
 
     private fun generateTripThemes(
-        member: Member,
-        tripThemeConstants: List<TripThemeConstants>
+            member: Member,
+            tripThemeConstants: List<TripThemeConstants>
     ): List<TripTheme> {
         return tripThemeConstants.map { TripTheme(member, it) }.toList()
     }

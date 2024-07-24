@@ -19,8 +19,8 @@ import java.util.*
 
 @Component
 class JwtFactory(
-    @Value("\${jwt.secret.key}") secret: String,
-    @Value("\${jwt.access-token-validity}") private val accessTokenValidity: Long,
+        @Value("\${jwt.secret.key}") secret: String,
+        @Value("\${jwt.access-token-validity}") private val accessTokenValidity: Long,
 ) {
     private val key: Key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret))
 
@@ -29,20 +29,20 @@ class JwtFactory(
         val expireDate = Date(now.time + accessTokenValidity)
 
         return Jwts.builder()
-            .setSubject(member.id.toString())
-            .setIssuedAt(now)
-            .claim("role", member.role)
-            .signWith(key, SignatureAlgorithm.HS256)
-            .setExpiration(expireDate)
-            .compact()
+                .setSubject(member.id.toString())
+                .setIssuedAt(now)
+                .claim("role", member.role)
+                .signWith(key, SignatureAlgorithm.HS256)
+                .setExpiration(expireDate)
+                .compact()
     }
 
     fun getTokenClaims(token: String): Jws<Claims> {
         return try {
             Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(token)
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token)
         } catch (exception: SecurityException) {
             throw BusinessException(AuthError.INVALID_JWT_SIGNATURE)
         } catch (exception: MalformedJwtException) {
@@ -59,10 +59,10 @@ class JwtFactory(
     fun getAuthentication(token: String): Authentication? {
         val claims: Claims = getTokenClaims(token).body
         val authorities =
-            Arrays.stream<String>(arrayOf<String>(claims["role"].toString()))
-                .map { role: String? -> SimpleGrantedAuthority(role) }
-                .toList()
-        val principal: User = CustomUser(UUID.fromString(claims.subject), claims.subject, "", authorities)
+                Arrays.stream<String>(arrayOf<String>(claims["role"].toString()))
+                        .map { role: String? -> SimpleGrantedAuthority(role) }
+                        .toList()
+        val principal: User = CustomUser(claims.subject.toLong(), claims.subject, "", authorities)
         return UsernamePasswordAuthenticationToken(principal, this, authorities)
     }
 }

@@ -12,20 +12,20 @@ import org.springframework.stereotype.Service
 
 @Service
 class TripMateService(
-    val memberRepository: MemberRepository,
-    val tripMateRepository: TripMateRepository
+        val memberRepository: MemberRepository,
+        val tripMateRepository: TripMateRepository
 ) {
-    fun updateTripMates(onboardingRequest: OnboardingRequest) {
-        val member = memberRepository.findById(onboardingRequest.memberId)
-            .orElseThrow { BusinessException(MemberError.NOT_FOUND) }
+    fun updateTripMates(id: Long, onboardingRequest: OnboardingRequest) {
+        val member = memberRepository.findById(id)
+                .orElseThrow { BusinessException(MemberError.NOT_FOUND) }
 
         val tripMates = generateTripMates(member, onboardingRequest.tripMateConstants)
         tripMateRepository.saveAll(tripMates)
     }
 
     private fun generateTripMates(
-        member: Member,
-        tripMateConstants: List<TripMateConstants>
+            member: Member,
+            tripMateConstants: List<TripMateConstants>
     ): List<TripMate> {
         return tripMateConstants.map { TripMate(member, it) }.toList()
     }

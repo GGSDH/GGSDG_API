@@ -9,21 +9,24 @@ import org.springframework.stereotype.Component
 class CustomRequestMatcher {
     fun authEndpoints(): RequestMatcher {
         return OrRequestMatcher(
-            AntPathRequestMatcher("/"), // Actuator Health Checker
-            AntPathRequestMatcher("/api/v1/oauth/**/**"), // Oauth Login
-            AntPathRequestMatcher("/api/v1/actuator")
+                AntPathRequestMatcher("/"), // Actuator Health Checker
+                AntPathRequestMatcher("/api/v1/dummy"),
+                AntPathRequestMatcher("/api/v1/trip/onboarding/themes"),
+                AntPathRequestMatcher("/api/v1/oauth/**/**"), // Oauth Login
+                AntPathRequestMatcher("/api/v1/actuator")
         )
     }
 
     fun tempUserEndpoints(): RequestMatcher {
         return OrRequestMatcher(
-            AntPathRequestMatcher("/api/v1/member/signup"),
+                AntPathRequestMatcher("/api/v1/trip/onboarding"),
+                AntPathRequestMatcher("/api/v1/member/signup"),
         )
     }
 
     fun userEndpoints(): RequestMatcher {
         return OrRequestMatcher(
-            AntPathRequestMatcher("/api/v1/search/**"),
+                AntPathRequestMatcher("/api/v1/search/**"),
         )
     }
 }

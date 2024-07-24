@@ -7,12 +7,13 @@ import org.springframework.stereotype.Service
 
 @Service
 class MemberIdentificationServiceFactory(
-    private val kakaoMemberIdentificationService: KakaoMemberIdentificationService,
+        private val kakaoMemberIdentificationService: KakaoMemberIdentificationService,
 ) {
     fun create(providerType: ProviderType): MemberIdentificationService {
         return when (providerType) {
             ProviderType.KAKAO -> kakaoMemberIdentificationService
             ProviderType.APPLE -> TODO()
+            ProviderType.DUMMY -> TODO()
         }
     }
 }
