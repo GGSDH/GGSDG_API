@@ -47,14 +47,14 @@ class AuthService(
             val accessToken = jwtFactory.createAccessToken(savedMember)
             return AuthResponse(
                 TokenResponse(accessToken),
-                savedMember,
+                savedMember.role,
             )
         }
 
         val accessToken = jwtFactory.createAccessToken(member)
         return AuthResponse(
             TokenResponse(accessToken),
-            member,
+            member.role,
         )
     }
 }
