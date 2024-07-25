@@ -1,6 +1,8 @@
 package com.ggsdh.backend.member.application.dto.response
 
+import com.ggsdh.backend.member.domain.Member
+
 data class MemberTokenResponse(
-        val memberId: Long?,
-        val accessToken: String
+    val member: Member?,
+    val accessToken: String,
 )

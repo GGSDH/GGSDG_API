@@ -4,9 +4,13 @@ import com.ggsdh.backend.global.dto.BaseResponse
 import com.ggsdh.backend.global.security.annotation.AuthId
 import com.ggsdh.backend.trip.application.TripThemeService
 import com.ggsdh.backend.trip.application.dto.request.OnboardingRequest
-import com.ggsdh.backend.trip.domain.constants.TripThemeConstants
+import com.ggsdh.backend.trip.presentation.dto.TripThemeOutputDto
 import jakarta.transaction.Transactional
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @Transactional
@@ -25,5 +29,14 @@ class TripController(
     }
 
     @GetMapping("/trip/onboarding/themes")
-    fun getOnboardingThemes(): BaseResponse<List<TripThemeConstants>> = BaseResponse.success(tripThemeService.getOnboardingThemes())
+    fun getOnboardingThemes(): BaseResponse<List<TripThemeOutputDto>> =
+        BaseResponse.success(
+            tripThemeService.getOnboardingThemes().map {
+                TripThemeOutputDto(
+                    it.name,
+                    it.icon,
+                    it.title,
+                )
+            },
+        )
 }

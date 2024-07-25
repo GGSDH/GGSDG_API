@@ -1,10 +1,10 @@
 package com.ggsdh.backend.member.presentation
 
+import com.ggsdh.backend.auth.application.dto.response.AuthResponse
 import com.ggsdh.backend.global.dto.BaseResponse
 import com.ggsdh.backend.global.security.annotation.AuthId
 import com.ggsdh.backend.member.application.MemberService
 import com.ggsdh.backend.member.application.dto.request.MemberRoleRequest
-import com.ggsdh.backend.member.application.dto.response.MemberTokenResponse
 import com.ggsdh.backend.member.presentation.dto.NicknameChangeRequest
 import jakarta.transaction.Transactional
 import org.springframework.web.bind.annotation.PostMapping
@@ -30,8 +30,13 @@ class MemberController(
     @PostMapping("/dummy")
     fun createDummyMember(
         @RequestBody memberRoleRequest: MemberRoleRequest,
-    ): BaseResponse<MemberTokenResponse> {
+    ): BaseResponse<AuthResponse> {
         val createDummyMember = memberService.createDummyMember(memberRoleRequest)
-        return BaseResponse.success(createDummyMember)
+        return BaseResponse.success(
+            AuthResponse.of(
+                createDummyMember.accessToken,
+                createDummyMember.member!!,
+            ),
+        )
     }
 }

@@ -35,6 +35,6 @@ class MemberService(
         val savedMember = memberRepository.save(member)
         val accessToken = jwtFactory.createAccessToken(savedMember)
 
-        return MemberTokenResponse(savedMember.id, accessToken)
+        return MemberTokenResponse(savedMember, accessToken)
     }
 }
