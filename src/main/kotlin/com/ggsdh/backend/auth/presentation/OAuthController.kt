@@ -34,7 +34,7 @@ class OAuthController(
         return BaseResponse.success(
             AuthResponse.of(
                 token.token.accessToken,
-                token.member,
+                token.role,
             ),
         )
     }

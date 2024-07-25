@@ -35,7 +35,7 @@ class MemberController(
         return BaseResponse.success(
             AuthResponse.of(
                 createDummyMember.accessToken,
-                createDummyMember.member!!,
+                createDummyMember.member!!.role,
             ),
         )
     }
