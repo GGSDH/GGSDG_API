@@ -1,6 +1,8 @@
 package com.ggsdh.backend.auth.application
 
 import com.ggsdh.backend.auth.application.dto.request.LoginRequest
+import com.ggsdh.backend.auth.application.dto.response.AuthResponse
+import com.ggsdh.backend.auth.application.dto.response.TokenResponse
 import com.ggsdh.backend.auth.domain.constants.Role
 import com.ggsdh.backend.auth.infrastructure.MemberIdentificationRepository
 import com.ggsdh.backend.auth.infrastructure.MemberIdentificationServiceFactory
@@ -20,7 +22,7 @@ class AuthService(
     private val memberIdentificationRepository: MemberIdentificationRepository,
     private val memberIdentificationServiceFactory: MemberIdentificationServiceFactory,
 ) {
-    fun login(loginRequest: LoginRequest): String {
+    fun login(loginRequest: LoginRequest): AuthResponse {
         val memberIdentificationService =
             memberIdentificationServiceFactory.create(
                 loginRequest.providerType,
@@ -41,9 +43,18 @@ class AuthService(
             val nickname = Nickname.generate()
             val member = Member(Role.ROLE_TEMP_USER, identification, nickname.value)
             val savedMember = memberRepository.save(member)
-            return jwtFactory.createAccessToken(savedMember)
+
+            val accessToken = jwtFactory.createAccessToken(savedMember)
+            return AuthResponse(
+                TokenResponse(accessToken),
+                savedMember,
+            )
         }
 
-        return jwtFactory.createAccessToken(member)
+        val accessToken = jwtFactory.createAccessToken(member)
+        return AuthResponse(
+            TokenResponse(accessToken),
+            member,
+        )
     }
 }
