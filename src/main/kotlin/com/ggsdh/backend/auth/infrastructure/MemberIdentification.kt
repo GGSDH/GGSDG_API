@@ -7,16 +7,16 @@ import jakarta.persistence.*
 @Entity
 @Table(name = "TB_MEMBER_IDENTIFICATION")
 class MemberIdentification(
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long?,
-    @Column
-    var type: ProviderType,
-    @Column(unique = true)
-    var kakaoId: Long?,
-    @Column(unique = true)
-    var sub: String?,
-    @Column
-    var refreshToken: String,
-    @OneToOne(mappedBy = "memberIdentification")
-    val member: Member?,
+        @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+        val id: Long?,
+        @Column
+        var type: ProviderType,
+        @Column(unique = true)
+        var kakaoId: Long?,
+        @Column(unique = true)
+        var sub: String?,
+        @Column
+        var refreshToken: String,
+        @OneToOne(mappedBy = "memberIdentification")
+        var member: Member?,
 )

@@ -8,12 +8,13 @@ import jakarta.persistence.*
 @Entity
 @Table(name = "TB_TRIP_THEME")
 class TripTheme(
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn
-    val member: Member,
+        @ManyToOne(fetch = FetchType.LAZY)
+        @JoinColumn
+        val member: Member,
 
-    @Column(name = "theme")
-    val tripThemeConstants: TripThemeConstants
+        @Column(name = "theme")
+        @Enumerated(EnumType.STRING)
+        val tripThemeConstants: TripThemeConstants
 ) : BaseEntity() {
 
     @Id

@@ -6,12 +6,13 @@ import com.ggsdh.backend.global.security.exception.AuthError
 enum class ProviderType(val provider: String) {
     KAKAO("kakao"),
     APPLE("apple"),
+    DUMMY("dummy")
     ;
 
     companion object {
         fun from(provider: String): ProviderType {
             return entries.firstOrNull { it.provider == provider }
-                ?: throw BusinessException(AuthError.UNSUPPORTED_PROVIDER)
+                    ?: throw BusinessException(AuthError.UNSUPPORTED_PROVIDER)
         }
     }
 

@@ -7,6 +7,7 @@ import com.ggsdh.backend.global.exception.error.GlobalError
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import org.slf4j.Logger
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
@@ -14,25 +15,27 @@ import java.io.IOException
 
 @Component
 class ApiExceptionHandlingFilter(
-    private val om: ObjectMapper,
+        private val om: ObjectMapper,
+        private val log: Logger
 ) : OncePerRequestFilter() {
     override fun doFilterInternal(
-        request: HttpServletRequest,
-        response: HttpServletResponse,
-        chain: FilterChain,
+            request: HttpServletRequest,
+            response: HttpServletResponse,
+            chain: FilterChain,
     ) {
         try {
             chain.doFilter(request, response)
         } catch (exception: BusinessException) {
             setErrorResponse(response, exception)
         } catch (exception: Exception) {
+            log.warn(exception.toString())
             setErrorResponse(response, BusinessException(GlobalError.INTERNAL_SERVER_ERROR))
         }
     }
 
     private fun setErrorResponse(
-        response: HttpServletResponse,
-        exception: BusinessException,
+            response: HttpServletResponse,
+            exception: BusinessException,
     ) = try {
         response.contentType = MediaType.APPLICATION_JSON_VALUE
         response.status = 500
