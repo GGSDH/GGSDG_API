@@ -1,10 +1,11 @@
 package com.ggsdh.backend.auth.application.dto.response
 
+import com.ggsdh.backend.auth.domain.constants.Role
 import com.ggsdh.backend.member.domain.Member
 
 class AuthResponse(
     val token: TokenResponse,
-    val member: Member,
+    val role: Role,
 ) {
     companion object {
         fun of(
@@ -13,7 +14,7 @@ class AuthResponse(
         ): AuthResponse =
             AuthResponse(
                 TokenResponse(accessToken),
-                member,
+                member.role,
             )
     }
 }
