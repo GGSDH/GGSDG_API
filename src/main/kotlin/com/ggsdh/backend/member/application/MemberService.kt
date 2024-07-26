@@ -37,4 +37,6 @@ class MemberService(
 
         return MemberTokenResponse(savedMember, accessToken)
     }
+
+    fun getMember(id: Long): Member = memberRepository.findById(id).orElseThrow { RuntimeException("Member not found") }
 }

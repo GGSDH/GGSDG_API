@@ -5,8 +5,10 @@ import com.ggsdh.backend.global.dto.BaseResponse
 import com.ggsdh.backend.global.security.annotation.AuthId
 import com.ggsdh.backend.member.application.MemberService
 import com.ggsdh.backend.member.application.dto.request.MemberRoleRequest
+import com.ggsdh.backend.member.presentation.dto.MemberResponse
 import com.ggsdh.backend.member.presentation.dto.NicknameChangeRequest
 import jakarta.transaction.Transactional
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -25,6 +27,22 @@ class MemberController(
         @RequestBody nicknameChangeRequest: NicknameChangeRequest,
     ) {
         memberService.updateNickname(id, nicknameChangeRequest.nickname)
+    }
+
+    @GetMapping("/member/")
+    fun getMember(
+        @AuthId id: Long,
+    ): BaseResponse<MemberResponse> {
+        val member = memberService.getMember(id)
+
+        return BaseResponse.success(
+            MemberResponse(
+                member.id!!,
+                member.nickname,
+                member.memberIdentification.type.name,
+                member.role.name,
+            ),
+        )
     }
 
     @PostMapping("/dummy")
