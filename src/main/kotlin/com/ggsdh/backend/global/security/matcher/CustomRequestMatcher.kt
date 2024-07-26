@@ -14,7 +14,7 @@ class CustomRequestMatcher {
             AntPathRequestMatcher("/api/v1/trip/onboarding/themes"),
             AntPathRequestMatcher("/api/v1/oauth/**/**"), // Oauth Login
             AntPathRequestMatcher("/api/v1/actuator"),
-            AntPathRequestMatcher("/api/v1/member/"),
+            AntPathRequestMatcher("/api/v1/member/**/**"),
         )
 
     fun tempUserEndpoints(): RequestMatcher =
@@ -28,6 +28,5 @@ class CustomRequestMatcher {
     fun userEndpoints(): RequestMatcher =
         OrRequestMatcher(
             AntPathRequestMatcher("/api/v1/search/**"),
-            AntPathRequestMatcher("/api/v1/member/"),
         )
 }
