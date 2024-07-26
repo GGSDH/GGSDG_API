@@ -34,6 +34,7 @@ class MemberController(
         @AuthId id: Long,
     ): BaseResponse<MemberResponse> {
         val member = memberService.getMember(id)
+        val themes = memberService.getTripThemeList(id)
 
         return BaseResponse.success(
             MemberResponse(
@@ -41,6 +42,7 @@ class MemberController(
                 member.nickname,
                 member.memberIdentification.type.name,
                 member.role.name,
+                themes,
             ),
         )
     }

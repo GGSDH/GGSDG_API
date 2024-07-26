@@ -15,6 +15,8 @@ class TripThemeService(
     val memberRepository: MemberRepository,
     val tripThemeRepository: TripThemeRepository,
 ) {
+    fun getMemberThemes(id: Long): List<TripTheme> = tripThemeRepository.findAllByMemberId(id)
+
     fun getOnboardingThemes(): List<TripThemeConstant> = TripThemeConstant.entries
 
     fun updateTripThemes(
