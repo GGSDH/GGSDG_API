@@ -22,10 +22,12 @@ class CustomRequestMatcher {
             AntPathRequestMatcher("/api/v1/trip/onboarding"),
             AntPathRequestMatcher("/api/v1/member/signup"),
             AntPathRequestMatcher("/api/v1/member/nickname"),
+            AntPathRequestMatcher("/api/v1/member/"),
         )
 
     fun userEndpoints(): RequestMatcher =
         OrRequestMatcher(
             AntPathRequestMatcher("/api/v1/search/**"),
+            AntPathRequestMatcher("/api/v1/member/"),
         )
 }
