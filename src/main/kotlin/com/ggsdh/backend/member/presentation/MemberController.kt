@@ -29,7 +29,7 @@ class MemberController(
         memberService.updateNickname(id, nicknameChangeRequest.nickname)
     }
 
-    @GetMapping("/member/")
+    @GetMapping("/member")
     fun getMember(
         @AuthId id: Long,
     ): BaseResponse<MemberResponse> {
