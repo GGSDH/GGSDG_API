@@ -22,6 +22,15 @@ class AuthService(
     private val memberIdentificationRepository: MemberIdentificationRepository,
     private val memberIdentificationServiceFactory: MemberIdentificationServiceFactory,
 ) {
+    fun refreshToken(id: Long): AuthResponse {
+        val member = memberRepository.findById(id).orElseThrow { RuntimeException("Member not found") }
+        val accessToken = jwtFactory.createAccessToken(member)
+        return AuthResponse(
+            TokenResponse(accessToken),
+            member.role,
+        )
+    }
+
     fun login(loginRequest: LoginRequest): AuthResponse {
         val memberIdentificationService =
             memberIdentificationServiceFactory.create(

@@ -6,6 +6,8 @@ import com.ggsdh.backend.auth.application.dto.response.AuthResponse
 import com.ggsdh.backend.auth.domain.constants.ProviderType
 import com.ggsdh.backend.auth.presentation.dto.KakaoLoginRequest
 import com.ggsdh.backend.global.dto.BaseResponse
+import com.ggsdh.backend.global.security.annotation.AuthId
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -17,6 +19,20 @@ import org.springframework.web.bind.annotation.RestController
 class OAuthController(
     private val authService: AuthService,
 ) {
+    @GetMapping("/refresh")
+    fun refreshToken(
+        @AuthId id: Long,
+    ): BaseResponse<AuthResponse> {
+        val token = authService.refreshToken(id)
+
+        return BaseResponse.success(
+            AuthResponse.of(
+                token.token.accessToken,
+                token.role,
+            ),
+        )
+    }
+
     @PostMapping("/{provider}/login")
     fun kakaoLogin(
         @PathVariable provider: String,
