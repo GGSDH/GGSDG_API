@@ -25,8 +25,21 @@ class MemberController(
     fun updateNickname(
         @AuthId id: Long,
         @RequestBody nicknameChangeRequest: NicknameChangeRequest,
-    ) {
+    ): BaseResponse<MemberResponse> {
         memberService.updateNickname(id, nicknameChangeRequest.nickname)
+
+        val member = memberService.getMember(id)
+        val themes = memberService.getTripThemeList(id)
+
+        return BaseResponse.success(
+            MemberResponse(
+                member.id!!,
+                member.nickname,
+                member.memberIdentification.type.name,
+                member.role.name,
+                themes,
+            ),
+        )
     }
 
     @GetMapping("/member")
