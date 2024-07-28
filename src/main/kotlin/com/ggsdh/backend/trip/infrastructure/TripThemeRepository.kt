@@ -5,4 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface TripThemeRepository : JpaRepository<TripTheme, Long> {
     fun findAllByMemberId(memberId: Long): List<TripTheme>
+
+    fun removeAllByMemberId(memberId: Long)
 }

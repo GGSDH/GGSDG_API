@@ -1,5 +1,6 @@
 package com.ggsdh.backend.trip.application
 
+import com.ggsdh.backend.auth.domain.constants.Role
 import com.ggsdh.backend.global.exception.error.BusinessException
 import com.ggsdh.backend.member.domain.Member
 import com.ggsdh.backend.member.exception.MemberError
@@ -27,7 +28,10 @@ class TripThemeService(
             memberRepository
                 .findById(id)
                 .orElseThrow { BusinessException(MemberError.NOT_FOUND) }
+        member.role = Role.ROLE_USER
+        memberRepository.save(member)
 
+        tripThemeRepository.removeAllByMemberId(member.id!!)
         val tripThemes = generateTripThemes(member, onboardingRequest.tripThemes)
         tripThemeRepository.saveAll(tripThemes)
     }
