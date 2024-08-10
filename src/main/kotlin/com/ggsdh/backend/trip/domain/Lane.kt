@@ -1,12 +1,14 @@
 package com.ggsdh.backend.trip.domain
 
+import com.ggsdh.backend.trip.domain.constants.TripThemeConstants
 import jakarta.persistence.*
 import jakarta.persistence.CascadeType.REMOVE
 
 @Entity
 @Table(name = "TB_LANE")
 class Lane(
-        var name: String
+        var name: String,
+        var tripThemeConstants: TripThemeConstants
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
