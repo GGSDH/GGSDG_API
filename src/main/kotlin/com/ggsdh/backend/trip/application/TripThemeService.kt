@@ -7,27 +7,27 @@ import com.ggsdh.backend.member.exception.MemberError
 import com.ggsdh.backend.member.infrastructure.persistence.MemberRepository
 import com.ggsdh.backend.trip.application.dto.request.OnboardingRequest
 import com.ggsdh.backend.trip.domain.TripTheme
-import com.ggsdh.backend.trip.domain.constants.TripThemeConstant
+import com.ggsdh.backend.trip.domain.constants.TripThemeConstants
 import com.ggsdh.backend.trip.infrastructure.TripThemeRepository
 import org.springframework.stereotype.Service
 
 @Service
 class TripThemeService(
-    val memberRepository: MemberRepository,
-    val tripThemeRepository: TripThemeRepository,
+        val memberRepository: MemberRepository,
+        val tripThemeRepository: TripThemeRepository,
 ) {
     fun getMemberThemes(id: Long): List<TripTheme> = tripThemeRepository.findAllByMemberId(id)
 
-    fun getOnboardingThemes(): List<TripThemeConstant> = TripThemeConstant.entries
+    fun getOnboardingThemes(): List<TripThemeConstants> = TripThemeConstants.entries
 
     fun updateTripThemes(
-        id: Long,
-        onboardingRequest: OnboardingRequest,
+            id: Long,
+            onboardingRequest: OnboardingRequest,
     ) {
         val member =
-            memberRepository
-                .findById(id)
-                .orElseThrow { BusinessException(MemberError.NOT_FOUND) }
+                memberRepository
+                        .findById(id)
+                        .orElseThrow { BusinessException(MemberError.NOT_FOUND) }
         member.role = Role.ROLE_USER
         memberRepository.save(member)
 
@@ -37,7 +37,7 @@ class TripThemeService(
     }
 
     private fun generateTripThemes(
-        member: Member,
-        tripThemeConstants: List<TripThemeConstant>,
+            member: Member,
+            tripThemeConstants: List<TripThemeConstants>,
     ): List<TripTheme> = tripThemeConstants.map { TripTheme(member, it) }.toList()
 }
