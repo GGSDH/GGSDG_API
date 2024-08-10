@@ -8,6 +8,8 @@ import jakarta.persistence.CascadeType.REMOVE
 @Table(name = "TB_LANE")
 class Lane(
         var name: String,
+
+        @Enumerated(value = EnumType.STRING)
         var tripThemeConstants: TripThemeConstants
 ) {
     @Id
