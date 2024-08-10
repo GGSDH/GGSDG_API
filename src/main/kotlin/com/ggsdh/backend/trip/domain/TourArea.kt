@@ -97,7 +97,15 @@ abstract class TourArea(
             rank: Long?,
             dataModifiedAt: LocalDate,
             dataCreatedAt: LocalDate,
-            var sponsorName: String?
+            var sponsorName: String?,
+            var startDate: LocalDate?,
+            var endDate: LocalDate?,
+            var playTime: String?,
+            var ageLimit: String?,
+            var eventPlace: String?,
+            var spendTimeFestival: String?,
+            var usetimeFestival: String?,
+            var discountInfo: String?
     ) : TourArea(
             tripThemeConstants,
             sigunguCode,
