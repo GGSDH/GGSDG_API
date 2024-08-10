@@ -49,6 +49,8 @@ dependencies {
     implementation("org.hibernate:hibernate-core:6.2.4.Final")
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+
+    implementation("org.asynchttpclient:async-http-client:3.0.0")
 }
 
 allOpen {
@@ -85,11 +87,13 @@ jib {
     to {
         image = "ggsdh/ggsdh-operate:latest"
         container {
-            jvmFlags = listOf(
+            jvmFlags =
+                listOf(
                     "-Dspring.profiles.active=real",
                     "-Dserver.port=8080",
-                    "-XX:+UseContainerSupport"
-            )
+                    "-XX:+UseContainerSupport",
+                )
+
             ports = listOf("8080")
         }
     }
