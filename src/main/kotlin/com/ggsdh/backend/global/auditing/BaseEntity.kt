@@ -13,27 +13,27 @@ import java.time.LocalDateTime
 @EntityListeners(value = [AuditingEntityListener::class])
 abstract class BaseEntity {
     @Column(
-        nullable = false,
-        insertable = false,
-        updatable = false,
-        columnDefinition = "datetime default CURRENT_TIMESTAMP",
+            nullable = false,
+            insertable = false,
+            updatable = false,
+            columnDefinition = "datetime default CURRENT_TIMESTAMP",
     )
     @CreatedDate
     @JsonFormat(
-        shape = JsonFormat.Shape.STRING,
-        pattern = "yyyy-MM-dd a HH:mm",
+            shape = JsonFormat.Shape.STRING,
+            pattern = "yyyy-MM-dd a HH:mm",
     )
-    open var createdDate: LocalDateTime? = null
+    var createdDate: LocalDateTime? = null
 
     @Column(
-        nullable = false,
-        insertable = false,
-        columnDefinition = "datetime default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP",
+            nullable = false,
+            insertable = false,
+            columnDefinition = "datetime default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP",
     )
     @LastModifiedDate
     @JsonFormat(
-        shape = JsonFormat.Shape.STRING,
-        pattern = "yyyy-MM-dd a HH:mm",
+            shape = JsonFormat.Shape.STRING,
+            pattern = "yyyy-MM-dd a HH:mm",
     )
-    open var updatedDate: LocalDateTime? = null
+    var updatedDate: LocalDateTime? = null
 }

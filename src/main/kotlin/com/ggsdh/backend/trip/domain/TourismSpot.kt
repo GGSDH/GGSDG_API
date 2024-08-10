@@ -23,8 +23,8 @@ open class TourismSpot(
         dataModifiedAt: LocalDate,
         dataCreatedAt: LocalDate,
         ranking: Long?,
-        open var grandTourYn: Boolean,
-        open var associatedGrandTourYn: Boolean
+        var grandTourYn: Boolean,
+        var associatedGrandTourYn: Boolean
 ) : TourArea(
         tripThemeConstants,
         sigunguCode,

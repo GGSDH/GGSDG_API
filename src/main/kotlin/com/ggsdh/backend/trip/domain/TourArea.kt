@@ -5,39 +5,48 @@ import com.ggsdh.backend.global.auditing.BaseEntity
 import com.ggsdh.backend.trip.domain.constants.SigunguCode
 import com.ggsdh.backend.trip.domain.constants.TripThemeConstants
 import jakarta.persistence.*
+import jakarta.persistence.CascadeType.REMOVE
 import java.time.LocalDate
 
 @Entity
 @Table(name = "TB_TOUR_AREA")
 @DiscriminatorColumn(name = "content_type")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-open class TourArea(
+class TourArea(
         @Enumerated(EnumType.STRING)
-        open var tripThemeConstants: TripThemeConstants,
+        var tripThemeConstants: TripThemeConstants,
 
         @Enumerated(EnumType.STRING)
-        open var sigunguCode: SigunguCode,
+        var sigunguCode: SigunguCode,
 
-        open var contentId: Long,
-        open var address1: String,
-        open var address2: String?,
-        open var image: String?,
-        open var latitude: Double,
-        open var longitude: Double,
-        open var mapLevel: Long?,
-        open var telNo: String?,
-        open var name: String,
-        open var ranking: Long?,
+        var contentId: Long,
+        var address1: String,
+        var address2: String?,
+        var image: String?,
+        var latitude: Double,
+        var longitude: Double,
+        var mapLevel: Long?,
+        var telNo: String?,
+        var name: String,
+        var ranking: Long?,
 
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-        open var dataModifiedAt: LocalDate,
+        var dataModifiedAt: LocalDate,
 
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-        open var dataCreatedAt: LocalDate
+        var dataCreatedAt: LocalDate
 ) : BaseEntity() {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "tour_area_id")
-    open var id: Long? = null
+    var id: Long? = null
+
+    @OneToMany(
+            targetEntity = LaneMapping::class,
+            mappedBy = "tourArea",
+            orphanRemoval = true,
+            cascade = [REMOVE]
+    )
+    var laneMappings: List<LaneMapping>? = listOf()
 }

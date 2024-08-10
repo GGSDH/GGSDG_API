@@ -23,8 +23,8 @@ open class Restaurant(
         ranking: Long?,
         dataModifiedAt: LocalDate,
         dataCreatedAt: LocalDate,
-        open var firstMenuImage: String?,
-        open var firstMenuName: String?
+        var firstMenuImage: String?,
+        var firstMenuName: String?
 ) : TourArea(
         tripThemeConstants,
         sigunguCode,

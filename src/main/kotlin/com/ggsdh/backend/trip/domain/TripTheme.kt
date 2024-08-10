@@ -19,5 +19,4 @@ class TripTheme(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "trip_theme_id")
     var id: Long? = null
-        private set
 }

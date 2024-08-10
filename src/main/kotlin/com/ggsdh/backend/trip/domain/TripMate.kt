@@ -21,5 +21,4 @@ class TripMate(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "TRIP_MATE_ID")
     var id: Long? = null
-        private set
 }
