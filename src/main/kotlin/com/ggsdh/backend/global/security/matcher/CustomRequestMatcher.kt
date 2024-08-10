@@ -16,7 +16,8 @@ class CustomRequestMatcher {
                     AntPathRequestMatcher("/api/v1/actuator"),
                     AntPathRequestMatcher("/api/v1/member/**/**"),
                     AntPathRequestMatcher("/api/v1/restaurant"),
-                    AntPathRequestMatcher("/api/v1/ranking")
+                    AntPathRequestMatcher("/api/v1/ranking"),
+                    AntPathRequestMatcher("/api/v1/lane"),
             )
 
     fun tempUserEndpoints(): RequestMatcher =

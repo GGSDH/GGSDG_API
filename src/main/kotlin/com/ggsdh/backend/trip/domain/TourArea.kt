@@ -5,7 +5,6 @@ import com.ggsdh.backend.global.auditing.BaseEntity
 import com.ggsdh.backend.trip.domain.constants.SigunguCode
 import com.ggsdh.backend.trip.domain.constants.TripThemeConstants
 import jakarta.persistence.*
-import jakarta.persistence.CascadeType.REMOVE
 import java.time.LocalDate
 
 @Entity
@@ -42,11 +41,7 @@ class TourArea(
     @Column(name = "tour_area_id")
     var id: Long? = null
 
-    @OneToMany(
-            targetEntity = LaneMapping::class,
-            mappedBy = "tourArea",
-            orphanRemoval = true,
-            cascade = [REMOVE]
-    )
-    var laneMappings: List<LaneMapping>? = listOf()
+    @JoinColumn(name = "lane_mapping_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    var laneMpping: LaneMapping? = null
 }

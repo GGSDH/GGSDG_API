@@ -8,7 +8,7 @@ import java.time.LocalDate
 
 @Entity
 @DiscriminatorValue("FESTIVAL_EVENT")
-open class FestivalEvent(
+class FestivalEvent(
         tripThemeConstants: TripThemeConstants,
         sigunguCode: SigunguCode,
         contentId: Long,
