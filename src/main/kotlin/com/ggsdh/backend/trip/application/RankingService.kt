@@ -10,8 +10,8 @@ class RankingService(
 ) {
     fun findAllRankingArea(): List<RankingRestaurantResponse> {
         val result = tourAreaRepository.findAllByRankingArea()
-        return result.map {
-            RankingRestaurantResponse(it.ranking, it.image, it.name, it.sigunguCode.value, it.tripThemeConstants)
+        return result.mapIndexed { index, it ->
+            RankingRestaurantResponse(index + 1, it.image, it.name, it.sigunguCode.value, it.tripThemeConstants)
         }.toList()
     }
 }

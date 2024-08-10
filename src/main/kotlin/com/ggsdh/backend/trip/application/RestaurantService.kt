@@ -14,7 +14,7 @@ class RestaurantService(
         val result = restaurantRepository.findAllByDataModifiedAfter(recent90Day)
 
         return result.map {
-            RandomRestaurantResponse(it.firstMenuImage, it.name, 35L, it.sigunguCode.value)
+            RandomRestaurantResponse(it.id, it.firstMenuImage, it.name, 35L, it.sigunguCode.value)
         }.toList()
     }
 }
