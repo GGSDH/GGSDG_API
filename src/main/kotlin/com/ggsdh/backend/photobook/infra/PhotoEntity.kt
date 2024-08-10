@@ -18,8 +18,8 @@ class PhotoEntity(
     @Column(name = "photo_id")
     var id: Long? = null,
     val path: String,
-    val lat: Double?,
-    val lon: Double?,
+    var lat: Double?,
+    var lon: Double?,
     val location: String?,
     val date: LocalDateTime,
     val photobookId: Long?,

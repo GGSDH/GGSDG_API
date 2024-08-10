@@ -83,7 +83,7 @@ fun PhotoEntity.toDomain(): Photo =
         path = this.path,
         location =
             if (this.lat != null && this.lon != null) {
-                Location(this.lat, this.lon, this.location, "경기도")
+                Location(this.lat!!, this.lon!!, this.location, "경기도")
             } else {
                 null
             },
