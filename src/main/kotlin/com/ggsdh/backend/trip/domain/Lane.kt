@@ -4,7 +4,8 @@ import jakarta.persistence.*
 
 @Entity
 @Table(name = "TB_LANE")
-class Lane() {
+class Lane(var name: String) {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "lane_id")

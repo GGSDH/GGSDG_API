@@ -4,7 +4,7 @@ import jakarta.persistence.*
 
 @Entity
 @Table(name = "TB_LANE_MAPPING")
-class LaneMapping() {
+class LaneMapping {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
