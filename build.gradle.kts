@@ -18,6 +18,7 @@ java {
 }
 
 repositories {
+    maven(url = "https://oss.sonatype.org/content/repositories/snapshots")
     mavenCentral()
 }
 
@@ -28,6 +29,9 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
+
+    implementation("com.linecorp.kotlin-jdsl:jpql-dsl:3.5.1")
+    implementation("com.linecorp.kotlin-jdsl:jpql-render:3.5.1")
 
     // Swagger
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0")
@@ -41,6 +45,8 @@ dependencies {
 
     implementation("io.jsonwebtoken:jjwt-api:0.11.5")
     implementation("io.jsonwebtoken:jjwt-gson:0.11.5")
+
+    implementation("org.hibernate:hibernate-core:6.2.4.Final")
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 }
@@ -74,9 +80,9 @@ jib {
         image = "ggsdh/ggsdh-operate:latest"
         container {
             jvmFlags = listOf(
-                "-Dspring.profiles.active=real",
-                "-Dserver.port=8080",
-                "-XX:+UseContainerSupport"
+                    "-Dspring.profiles.active=real",
+                    "-Dserver.port=8080",
+                    "-XX:+UseContainerSupport"
             )
             ports = listOf("8080")
         }

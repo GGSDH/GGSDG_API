@@ -8,25 +8,27 @@ import org.springframework.stereotype.Component
 @Component
 class CustomRequestMatcher {
     fun authEndpoints(): RequestMatcher =
-        OrRequestMatcher(
-            AntPathRequestMatcher("/"), // Actuator Health Checker
-            AntPathRequestMatcher("/api/v1/dummy"),
-            AntPathRequestMatcher("/api/v1/trip/onboarding/themes"),
-            AntPathRequestMatcher("/api/v1/oauth/**/**"), // Oauth Login
-            AntPathRequestMatcher("/api/v1/actuator"),
-            AntPathRequestMatcher("/api/v1/member/**/**"),
-        )
+            OrRequestMatcher(
+                    AntPathRequestMatcher("/"), // Actuator Health Checker
+                    AntPathRequestMatcher("/api/v1/dummy"),
+                    AntPathRequestMatcher("/api/v1/trip/onboarding/themes"),
+                    AntPathRequestMatcher("/api/v1/oauth/**/**"), // Oauth Login
+                    AntPathRequestMatcher("/api/v1/actuator"),
+                    AntPathRequestMatcher("/api/v1/member/**/**"),
+                    AntPathRequestMatcher("/api/v1/restaurant"),
+                    AntPathRequestMatcher("/api/v1/ranking")
+            )
 
     fun tempUserEndpoints(): RequestMatcher =
-        OrRequestMatcher(
-            AntPathRequestMatcher("/api/v1/trip/onboarding"),
-            AntPathRequestMatcher("/api/v1/member/signup"),
-            AntPathRequestMatcher("/api/v1/member/nickname"),
-            AntPathRequestMatcher("/api/v1/member/"),
-        )
+            OrRequestMatcher(
+                    AntPathRequestMatcher("/api/v1/trip/onboarding"),
+                    AntPathRequestMatcher("/api/v1/member/signup"),
+                    AntPathRequestMatcher("/api/v1/member/nickname"),
+                    AntPathRequestMatcher("/api/v1/member/"),
+            )
 
     fun userEndpoints(): RequestMatcher =
-        OrRequestMatcher(
-            AntPathRequestMatcher("/api/v1/search/**"),
-        )
+            OrRequestMatcher(
+                    AntPathRequestMatcher("/api/v1/search/**"),
+            )
 }
