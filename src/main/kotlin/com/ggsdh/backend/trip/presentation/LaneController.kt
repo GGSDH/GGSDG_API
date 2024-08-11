@@ -4,29 +4,21 @@ import com.ggsdh.backend.global.dto.BaseResponse
 import com.ggsdh.backend.global.security.annotation.AuthId
 import com.ggsdh.backend.trip.application.LaneService
 import com.ggsdh.backend.trip.application.LikeService
+import com.ggsdh.backend.trip.application.dto.response.LaneResponses
 import jakarta.transaction.Transactional
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @Transactional
 @RequestMapping("/api/v1/lane")
 class LaneController(
-    private val laneService: LaneService,
-    private val likeService: LikeService,
+        private val laneService: LaneService,
+        private val likeService: LikeService,
 ) {
-    @GetMapping("/test")
-    fun test() {
-        laneService.test()
-    }
-
     @PostMapping("/{laneId}/like")
     fun likeLane(
-        @AuthId memberId: Long,
-        @PathVariable laneId: Long,
+            @AuthId memberId: Long,
+            @PathVariable laneId: Long,
     ): BaseResponse<Boolean> {
         likeService.likeLane(memberId, laneId)
 
@@ -35,8 +27,8 @@ class LaneController(
 
     @PostMapping("/{laneId}/unlike")
     fun unlikeLane(
-        @AuthId memberId: Long,
-        @PathVariable laneId: Long,
+            @AuthId memberId: Long,
+            @PathVariable laneId: Long,
     ): BaseResponse<Boolean> {
         likeService.unlikeLane(memberId, laneId)
 
@@ -44,8 +36,8 @@ class LaneController(
     }
 
     @GetMapping
-    fun getLanes(): BaseResponse<Unit> {
-        val laneResponse = laneService.getThemeLane()
+    fun getLanes(@AuthId id: Long): BaseResponse<List<LaneResponses>> {
+        val laneResponse = laneService.getThemeLane(id)
         return BaseResponse.success(laneResponse)
     }
 }
