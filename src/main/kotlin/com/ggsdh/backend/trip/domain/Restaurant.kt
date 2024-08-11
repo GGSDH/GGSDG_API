@@ -8,23 +8,24 @@ import java.time.LocalDate
 
 @Entity
 @DiscriminatorValue("RESTAURANT")
-open class Restaurant(
-        tripThemeConstants: TripThemeConstants,
-        sigunguCode: SigunguCode,
-        contentId: Long,
-        address1: String,
-        address2: String?,
-        image: String?,
-        latitude: Double,
-        longitude: Double,
-        mapLevel: Long?,
-        telNo: String?,
-        name: String,
-        ranking: Long?,
-        dataModifiedAt: LocalDate,
-        dataCreatedAt: LocalDate,
-        var firstMenuImage: String?,
-        var firstMenuName: String?
+class Restaurant(
+    tripThemeConstants: TripThemeConstants,
+    sigunguCode: SigunguCode,
+    contentId: Long,
+    address1: String,
+    address2: String?,
+    image: String?,
+    latitude: Double,
+    longitude: Double,
+    mapLevel: Long?,
+    telNo: String?,
+    name: String,
+    ranking: Long?,
+    likes: Long,
+    dataModifiedAt: LocalDate,
+    dataCreatedAt: LocalDate,
+    var firstMenuImage: String?,
+    var firstMenuName: String?,
 ) : TourArea(
         tripThemeConstants,
         sigunguCode,
@@ -38,7 +39,7 @@ open class Restaurant(
         telNo,
         name,
         ranking,
+        likes,
         dataModifiedAt,
-        dataCreatedAt
-)
-
+        dataCreatedAt,
+    )

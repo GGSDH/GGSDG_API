@@ -12,30 +12,26 @@ import java.time.LocalDate
 @DiscriminatorColumn(name = "content_type")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 class TourArea(
-        @Enumerated(EnumType.STRING)
-        var tripThemeConstants: TripThemeConstants,
-
-        @Enumerated(EnumType.STRING)
-        var sigunguCode: SigunguCode,
-
-        var contentId: Long,
-        var address1: String,
-        var address2: String?,
-        var image: String?,
-        var latitude: Double,
-        var longitude: Double,
-        var mapLevel: Long?,
-        var telNo: String?,
-        var name: String,
-        var ranking: Long?,
-
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-        var dataModifiedAt: LocalDate,
-
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-        var dataCreatedAt: LocalDate
+    @Enumerated(EnumType.STRING)
+    var tripThemeConstants: TripThemeConstants,
+    @Enumerated(EnumType.STRING)
+    var sigunguCode: SigunguCode,
+    var contentId: Long,
+    var address1: String,
+    var address2: String?,
+    var image: String?,
+    var latitude: Double,
+    var longitude: Double,
+    var mapLevel: Long?,
+    var telNo: String?,
+    var name: String,
+    var ranking: Long?,
+    var likes: Long = 0,
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    var dataModifiedAt: LocalDate,
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    var dataCreatedAt: LocalDate,
 ) : BaseEntity() {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "tour_area_id")
