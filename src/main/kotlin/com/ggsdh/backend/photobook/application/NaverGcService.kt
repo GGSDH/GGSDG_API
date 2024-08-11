@@ -5,6 +5,7 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import com.ggsdh.backend.photobook.application.dto.ApiResponse
 import com.ggsdh.backend.photobook.application.dto.GetLocationInputDto
 import com.ggsdh.backend.photobook.domain.Location
+import org.asynchttpclient.AsyncHttpClient
 import org.asynchttpclient.Dsl.asyncHttpClient
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
@@ -17,13 +18,14 @@ class NaverGcService(
     private val clientId: String,
     @Value("\${naver.gc.client-secret}")
     private val clientSecret: String,
+    private val asyncHttpClient: AsyncHttpClient,
 ) {
     fun getLocation(input: GetLocationInputDto): CompletableFuture<Location?> {
         if (input.lat == null || input.lon == null) {
             return CompletableFuture.completedFuture(null)
         }
 
-        return asyncHttpClient()
+        return asyncHttpClient
             .prepareGet(
                 "https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc?coords=${input.lon},${input.lat}&output=json&orders=roadaddr",
             ).setHeader("X-NCP-APIGW-API-KEY", clientSecret)

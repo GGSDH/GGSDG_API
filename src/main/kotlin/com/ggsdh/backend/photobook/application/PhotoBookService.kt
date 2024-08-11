@@ -10,6 +10,7 @@ import jakarta.transaction.Transactional
 import org.springframework.stereotype.Component
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.UUID
 import java.util.concurrent.CompletableFuture
 
 @Component
@@ -42,23 +43,27 @@ class PhotoBookService(
         input: CreatePhotobookRequest,
     ): PhotoBook {
         val photos: MutableList<Photo> = mutableListOf()
+        val chunkSize = 10
+        val photoChunks = input.photos.chunked(chunkSize)
 
-        CompletableFuture
-            .allOf(
-                *input.photos
-                    .map { photo ->
-                        naverGcService.getLocation(photo.toGetLocationInputDto()).thenApply {
-                            photos.add(
-                                Photo(
-                                    id = -1,
-                                    path = photo.path,
-                                    location = it,
-                                    dateTime = photo.toGetLocationInputDto().date,
-                                ),
-                            )
-                        }
-                    }.toTypedArray(),
-            ).join()
+        photoChunks.forEach { chunk ->
+            CompletableFuture
+                .allOf(
+                    *chunk
+                        .map { photo ->
+                            naverGcService.getLocation(photo.toGetLocationInputDto()).thenApply {
+                                photos.add(
+                                    Photo(
+                                        id = UUID.randomUUID().toString(),
+                                        path = photo.path,
+                                        location = it,
+                                        dateTime = photo.toGetLocationInputDto().date,
+                                    ),
+                                )
+                            }
+                        }.toTypedArray(),
+                ).join()
+        }
 
         photos.filter {
             it.location?.city == "경기도"
@@ -83,6 +88,6 @@ class PhotoBookService(
 
     fun deletePhoto(
         memberId: Long,
-        photoId: List<Long>,
+        photoId: List<String>,
     ) = photoBookRepository.deletePhotos(memberId, photoId)
 }

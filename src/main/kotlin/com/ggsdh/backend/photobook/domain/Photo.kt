@@ -1,9 +1,10 @@
 package com.ggsdh.backend.photobook.domain
 
 import java.time.LocalDateTime
+import java.util.UUID
 
 class Photo(
-    val id: Long,
+    val id: String,
     val path: String,
     val location: Location?,
     val dateTime: LocalDateTime,
@@ -12,6 +13,6 @@ class Photo(
         fun create(
             path: String,
             dateTime: LocalDateTime,
-        ): Photo = Photo(-1, path, null, dateTime)
+        ): Photo = Photo(UUID.randomUUID().toString(), path, null, dateTime)
     }
 }

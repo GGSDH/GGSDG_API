@@ -4,12 +4,15 @@ import com.ggsdh.backend.photobook.domain.Location
 import com.ggsdh.backend.photobook.domain.Photo
 import com.ggsdh.backend.photobook.domain.PhotoBook
 import com.ggsdh.backend.photobook.domain.PhotoBookRepository
+import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Repository
+import java.time.LocalDateTime
 
 @Repository
 class PhotoBookRepositoryImpl(
     private val jpaPhotoBookRepository: JpaPhotoBookRepository,
     private val jpaPhotoRepository: JpaPhotoRepository,
+    private val jdbcTemplate: JdbcTemplate,
 ) : PhotoBookRepository {
     override fun delete(
         memberId: Long,
@@ -18,10 +21,38 @@ class PhotoBookRepositoryImpl(
         val entity = jpaPhotoBookRepository.findByMemberIdAndId(memberId, photoBookId) ?: return false
 
         val photos = jpaPhotoRepository.findAllByPhotobookId(entity.id)
-        jpaPhotoRepository.deleteAllById(photos.map { it.id!! })
+        jpaPhotoRepository.deleteAllById(photos.map { it.id })
         jpaPhotoBookRepository.delete(entity)
 
         return true
+    }
+
+    private fun batchInsertPhotos(
+        photos: List<Photo>,
+        photobookId: Long,
+    ) {
+        val sql =
+            """
+            INSERT INTO tb_photo (photo_id, path, lat, lon, location, date, photobook_id, created_date, updated_date)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """.trimIndent()
+
+        jdbcTemplate.batchUpdate(
+            sql,
+            photos.map { photo ->
+                arrayOf(
+                    photo.id.toString(),
+                    photo.path,
+                    photo.location?.lat,
+                    photo.location?.lon,
+                    photo.location?.name,
+                    photo.dateTime,
+                    photobookId,
+                    LocalDateTime.now(),
+                    LocalDateTime.now(),
+                )
+            },
+        )
     }
 
     override fun save(
@@ -32,12 +63,9 @@ class PhotoBookRepositoryImpl(
 
         val savedEntity = jpaPhotoBookRepository.save(entity)
 
-        val photos =
-            photoBook.photos.map { photo ->
-                jpaPhotoRepository.save(photo.toEntity(savedEntity.id)).toDomain()
-            }
+        batchInsertPhotos(photoBook.photos, savedEntity.id)
 
-        return savedEntity.toDomain(photos)
+        return savedEntity.toDomain(photoBook.photos)
     }
 
     override fun getAllByMemberId(memberId: Long): List<PhotoBook> {
@@ -63,7 +91,7 @@ class PhotoBookRepositoryImpl(
 
     override fun deletePhotos(
         memberId: Long,
-        photoId: List<Long>,
+        photoId: List<String>,
     ): Boolean {
         val photos = jpaPhotoRepository.findAllById(photoId)
 
@@ -79,7 +107,7 @@ class PhotoBookRepositoryImpl(
 
 fun PhotoEntity.toDomain(): Photo =
     Photo(
-        id = this.id!!,
+        id = this.id,
         path = this.path,
         location =
             if (this.lat != null && this.lon != null) {

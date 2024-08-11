@@ -20,6 +20,6 @@ interface PhotoBookRepository {
 
     fun deletePhotos(
         memberId: Long,
-        photoId: List<Long>,
+        photoId: List<String>,
     ): Boolean
 }
