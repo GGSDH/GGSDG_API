@@ -12,29 +12,51 @@ import org.springframework.stereotype.Repository
 
 @Repository
 class QLaneRepository(
-        private val query: JPAQueryFactory,
+    private val query: JPAQueryFactory,
 ) {
-    fun getThemeLanesByMemberId(id: Long): List<LaneResponses> {
-        return query
-                .select(themeLanesConstructorExpression())
-                .from(lane)
-                .leftJoin(tripTheme)
-                .on(tripTheme.tripThemeConstants.eq(lane.tripThemeConstants))
-                .leftJoin(laneMapping)
-                .on(laneMapping.lane.id.eq(lane.id)) // Adjust the join condition as needed
-                .where(tripTheme.member.id.eq(id))
-                .orderBy(Expressions.numberTemplate(Long::class.java, "RAND()").asc())
-                .limit(3)
-                .fetch()
+    fun getThemeLanesByMemberId(id: Long): List<LaneResponses> =
+        query
+            .select(themeLanesConstructorExpression())
+            .from(lane)
+            .leftJoin(tripTheme)
+            .on(tripTheme.tripThemeConstants.eq(lane.tripThemeConstants))
+            .leftJoin(laneMapping)
+            .on(laneMapping.lane.id.eq(lane.id)) // Adjust the join condition as needed
+            .where(tripTheme.member.id.eq(id))
+            .orderBy(Expressions.numberTemplate(Long::class.java, "RAND()").asc())
+            .limit(3)
+            .fetch()
+
+    fun findLaneById(id: Long): LaneResponses? =
+        query
+            .select(themeLanesConstructorExpression())
+            .from(lane)
+            .leftJoin(laneMapping)
+            .on(laneMapping.lane.id.eq(lane.id)) // Adjust the join condition as needed
+            .where(lane.id.eq(id))
+            .fetchFirst()
+
+    fun getAllLanesWithTourAreaId(tourAreaId: Long): List<Long> {
+        val lanes =
+            query
+                .selectDistinct(
+                    laneMapping.id,
+                ).from(laneMapping)
+                .where(
+                    laneMapping.tourArea.id
+                        .eq(tourAreaId),
+                ).fetch()
+
+        return lanes
     }
 
     private fun themeLanesConstructorExpression(): ConstructorExpression<LaneResponses>? =
-            Projections.constructor(
-                    LaneResponses::class.java,
-                    lane.id,
-                    lane.name,
-                    lane.tripThemeConstants,
-                    lane.likes,
-                    laneMapping.tourArea.image
-            )
+        Projections.constructor(
+            LaneResponses::class.java,
+            lane.id,
+            lane.name,
+            lane.tripThemeConstants,
+            lane.likes,
+            laneMapping.tourArea.image,
+        )
 }
