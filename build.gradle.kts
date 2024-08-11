@@ -8,6 +8,8 @@ plugins {
     kotlin("plugin.spring") version "1.9.22"
     kotlin("plugin.jpa") version "1.9.22"
     kotlin("plugin.allopen") version "1.9.22"
+
+    kotlin("kapt") version "1.9.22"
 }
 
 group = "com.ggsdh"
@@ -51,8 +53,19 @@ dependencies {
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
     implementation("org.asynchttpclient:async-http-client:3.0.0")
+
+    implementation("com.querydsl:querydsl-jpa:5.0.0:jakarta")
+    kapt("com.querydsl:querydsl-apt:5.0.0:jakarta")
 }
 
+kapt {
+    javacOptions {
+        option("querydsl.entityAccessors", true)
+    }
+    arguments {
+        arg("plugin", "com.querydsl.apt.jpa.JPAAnnotationProcessor")
+    }
+}
 allOpen {
     annotation("jakarta.persistence.Entity")
     annotation("jakarta.persistence.MappedSuperclass")
