@@ -11,8 +11,12 @@ import org.springframework.web.bind.annotation.RestController
 @Transactional
 @RequestMapping("/api/v1/lane")
 class LaneController(
-        private val laneService: LaneService
+    private val laneService: LaneService,
 ) {
+    @GetMapping("/test")
+    fun test() {
+        laneService.test()
+    }
 
     @GetMapping
     fun getLanes(): BaseResponse<Unit> {
