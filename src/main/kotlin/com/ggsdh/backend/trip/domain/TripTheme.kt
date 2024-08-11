@@ -8,9 +8,10 @@ import jakarta.persistence.*
 @Entity
 @Table(name = "TB_TRIP_THEME")
 class TripTheme(
+        @JoinColumn(name = "member_id")
         @ManyToOne(fetch = FetchType.LAZY)
-        @JoinColumn
         val member: Member,
+        
         @Column(name = "theme")
         @Enumerated(EnumType.STRING)
         val tripThemeConstants: TripThemeConstants,

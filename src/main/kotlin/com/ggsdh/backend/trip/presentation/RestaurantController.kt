@@ -1,6 +1,7 @@
 package com.ggsdh.backend.trip.presentation
 
 import com.ggsdh.backend.global.dto.BaseResponse
+import com.ggsdh.backend.global.security.annotation.AuthId
 import com.ggsdh.backend.trip.application.RestaurantService
 import com.ggsdh.backend.trip.application.dto.response.RandomRestaurantResponse
 import jakarta.transaction.Transactional
@@ -12,12 +13,13 @@ import org.springframework.web.bind.annotation.RestController
 @Transactional
 @RequestMapping("/api/v1/restaurant")
 class RestaurantController(
-        private val restaurantService: RestaurantService
+    private val restaurantService: RestaurantService,
 ) {
-
     @GetMapping
-    fun getRandomRestaurants(): BaseResponse<List<RandomRestaurantResponse>> {
-        val result = restaurantService.getRandomRestaurant()
+    fun getRandomRestaurants(
+        @AuthId memberId: Long,
+    ): BaseResponse<List<RandomRestaurantResponse>> {
+        val result = restaurantService.getRandomRestaurant(memberId)
         return BaseResponse.success(result)
     }
 }
