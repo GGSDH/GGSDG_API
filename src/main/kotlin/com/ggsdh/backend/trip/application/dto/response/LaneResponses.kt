@@ -6,5 +6,6 @@ data class LaneResponses(
         val laneId: Long?,
         val laneName: String,
         val tripThemeConstants: TripThemeConstants,
-        val likes: Long
+        val likes: Long,
+        val image: String
 )
