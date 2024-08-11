@@ -7,10 +7,10 @@ import jakarta.persistence.*
 @Entity
 @Table(name = "TB_LANE")
 class Lane(
-        var name: String,
-
-        @Enumerated(value = EnumType.STRING)
-        var tripThemeConstants: TripThemeConstants
+    var name: String,
+    @Enumerated(value = EnumType.STRING)
+    var tripThemeConstants: TripThemeConstants,
+    var likes: Long = 0,
 ) : BaseEntity() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

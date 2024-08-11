@@ -7,14 +7,24 @@ import java.time.LocalDate
 
 @Service
 class RestaurantService(
-        private val restaurantRepository: RestaurantRepository
+    private val restaurantRepository: RestaurantRepository,
+    private val likeService: LikeService,
 ) {
-    fun getRandomRestaurant(): List<RandomRestaurantResponse> {
+    fun getRandomRestaurant(memberId: Long): List<RandomRestaurantResponse> {
         val recent90Day = LocalDate.now().minusDays(90)
         val result = restaurantRepository.findAllByDataModifiedAfter(recent90Day)
+        val userLikes = likeService.getAllLikedTourAreaIdsByMember(memberId)
 
-        return result.map {
-            RandomRestaurantResponse(it.id, it.firstMenuImage, it.name, 35L, it.sigunguCode.value)
-        }.toList()
+        return result
+            .map {
+                RandomRestaurantResponse(
+                    it.id,
+                    it.firstMenuImage,
+                    it.name,
+                    it.likes,
+                    it.sigunguCode.value,
+                    userLikes.contains(it.id),
+                )
+            }.toList()
     }
 }
