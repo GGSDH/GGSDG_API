@@ -5,6 +5,7 @@ import com.ggsdh.backend.global.security.annotation.AuthId
 import com.ggsdh.backend.trip.application.LaneService
 import com.ggsdh.backend.trip.application.LikeService
 import com.ggsdh.backend.trip.application.dto.response.LaneResponses
+import com.ggsdh.backend.trip.application.dto.response.LaneSpecificResponse
 import jakarta.transaction.Transactional
 import org.springframework.web.bind.annotation.*
 
@@ -33,6 +34,15 @@ class LaneController(
         likeService.unlikeLane(memberId, laneId)
 
         return BaseResponse.success(true)
+    }
+
+    @GetMapping("/{laneId}")
+    fun getLaneSpecificResponse(
+            @AuthId id: Long,
+            @PathVariable laneId: Long
+    ): BaseResponse<List<LaneSpecificResponse>> {
+        val specificLaneResponse = laneService.getSpecificLaneResponse(laneId)
+        return BaseResponse.success(specificLaneResponse)
     }
 
     @GetMapping
