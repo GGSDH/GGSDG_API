@@ -39,16 +39,7 @@ class LaneService(
 
     fun getSpecificLaneResponse(laneId: Long): List<LaneSpecificResponse> {
         val laneMappings = laneMappingRepository.findAllByLaneId(laneId)
-        return laneMappings.map {
-            LaneSpecificResponse(it.id, it.sequence,
-                    TourAreaResponse(
-                            it.tourArea!!.id,
-                            it.tourArea!!.latitude,
-                            it.tourArea!!.longitude,
-                            it.tourArea!!.image,
-                            it.tourArea!!.likes,
-                            false
-                    ))
-        }
+        return laneMappings.map { LaneSpecificResponse(it.sequence, TourAreaResponse(it.tourArea!!.id, it.tourArea!!.latitude, it.tourArea!!.longitude, it.tourArea!!.image, it.tourArea!!.likes, false)) }.toList()
+
     }
 }
