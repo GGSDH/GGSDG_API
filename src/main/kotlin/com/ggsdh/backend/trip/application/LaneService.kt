@@ -14,18 +14,18 @@ import org.springframework.stereotype.Service
 
 @Service
 class LaneService(
-        private val laneRepository: LaneRepository,
-        private val laneMappingRepository: LaneMappingRepository,
-        private val qLaneRepository: QLaneRepository,
-        private val memberRepository: MemberRepository,
+    private val laneRepository: LaneRepository,
+    private val laneMappingRepository: LaneMappingRepository,
+    private val qLaneRepository: QLaneRepository,
+    private val memberRepository: MemberRepository,
 ) {
     fun findLaneById(id: Long): LaneResponses? = qLaneRepository.findLaneById(id)
 
     fun getThemeLane(id: Long): List<LaneResponses> {
         val member =
-                memberRepository
-                        .findById(id)
-                        .orElseThrow { BusinessException(MemberError.NOT_FOUND) }
+            memberRepository
+                .findById(id)
+                .orElseThrow { BusinessException(MemberError.NOT_FOUND) }
 
         return qLaneRepository.getThemeLanesByMemberId(id)
     }
@@ -39,7 +39,21 @@ class LaneService(
 
     fun getSpecificLaneResponse(laneId: Long): List<LaneSpecificResponse> {
         val laneMappings = laneMappingRepository.findAllByLaneId(laneId)
-        return laneMappings.map { LaneSpecificResponse(it.sequence, it.lane!!.name, TourAreaResponse(it.tourArea!!.id, it.tourArea!!.name, it.tourArea!!.latitude, it.tourArea!!.longitude, it.tourArea!!.image, it.tourArea!!.likes, false)) }.toList()
-
+        return laneMappings
+            .map {
+                LaneSpecificResponse(
+                    it.sequence,
+                    it.lane!!.name,
+                    TourAreaResponse(
+                        it.tourArea!!.id,
+                        it.tourArea!!.name,
+                        it.tourArea!!.latitude,
+                        it.tourArea!!.longitude,
+                        it.tourArea!!.image,
+                        it.tourArea!!.likes,
+                        false,
+                    ),
+                )
+            }.toList()
     }
 }

@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service
 class TourAreaService(
     private val tourAreaRepository: TourAreaRepository,
 ) {
+    fun getAllBySigunguCodes(sigunguCodes: List<String>): List<TourArea> = tourAreaRepository.findAllBySigunguCodeIn(sigunguCodes)
+
     fun getTourAreaById(tourAreaId: Long): TourArea =
         tourAreaRepository.findById(tourAreaId).orElseThrow {
             BusinessException(GlobalError.PHOTOBOOK_NOT_FOUND)
