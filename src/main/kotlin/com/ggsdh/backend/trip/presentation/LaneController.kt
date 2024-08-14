@@ -1,14 +1,16 @@
 package com.ggsdh.backend.trip.presentation
 
 import com.ggsdh.backend.global.dto.BaseResponse
+import com.ggsdh.backend.global.exception.error.BusinessException
+import com.ggsdh.backend.global.exception.error.GlobalError
 import com.ggsdh.backend.global.security.annotation.AuthId
 import com.ggsdh.backend.trip.application.AILaneService
 import com.ggsdh.backend.trip.application.LaneService
 import com.ggsdh.backend.trip.application.LikeService
 import com.ggsdh.backend.trip.application.dto.request.AIUserRequest
 import com.ggsdh.backend.trip.application.dto.response.LaneResponses
-import com.ggsdh.backend.trip.application.dto.response.LaneSpecificResponse
 import com.ggsdh.backend.trip.presentation.dto.AIResponseDto
+import com.ggsdh.backend.trip.presentation.dto.LaneResponse
 import jakarta.transaction.Transactional
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -49,9 +51,18 @@ class LaneController(
     fun getLaneSpecificResponse(
         @AuthId id: Long,
         @PathVariable laneId: Long,
-    ): BaseResponse<List<LaneSpecificResponse>> {
+    ): BaseResponse<LaneResponse> {
+        val lane = laneService.findLaneById(laneId) ?: throw BusinessException(GlobalError.GLOBAL_NOT_FOUND)
         val specificLaneResponse = laneService.getSpecificLaneResponse(id, laneId)
-        return BaseResponse.success(specificLaneResponse)
+        return BaseResponse.success(
+            LaneResponse(
+                lane.laneId,
+                lane.days,
+                lane.laneName,
+                lane.image,
+                specificLaneResponse,
+            ),
+        )
     }
 
     @GetMapping
