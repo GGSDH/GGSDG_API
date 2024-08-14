@@ -1,7 +1,11 @@
 package com.ggsdh.backend.trip.application
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.ggsdh.backend.trip.application.dto.request.*
+import com.ggsdh.backend.trip.application.dto.request.AIRequest
+import com.ggsdh.backend.trip.application.dto.request.AIRequestMessage
+import com.ggsdh.backend.trip.application.dto.request.AITourArea
+import com.ggsdh.backend.trip.application.dto.request.AIUserMessage
+import com.ggsdh.backend.trip.application.dto.request.AIUserRequest
 import com.ggsdh.backend.trip.application.dto.response.ChatCompletionResponse
 import com.ggsdh.backend.trip.application.dto.response.ParsedContent
 import com.ggsdh.backend.trip.domain.Lane
@@ -9,6 +13,7 @@ import com.ggsdh.backend.trip.domain.LaneMapping
 import com.ggsdh.backend.trip.infrastructure.LaneMappingRepository
 import com.ggsdh.backend.trip.infrastructure.LaneRepository
 import com.ggsdh.backend.trip.presentation.dto.AIResponseDto
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
@@ -129,7 +134,7 @@ class AILaneService(
                 HttpHeaders().apply {
                     set(
                         "Authorization",
-                        "Bearer ", // TODO,
+                        "Bearer $openaiApiKey", // TODO,
                     )
                 },
             )
