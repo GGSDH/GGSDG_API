@@ -109,6 +109,32 @@ class LikeService(
         laneRepository.save(lane)
     }
 
+    @Transactional
+    fun likeAILane(
+        memberId: Long,
+        laneId: Long,
+    ) {
+        val lane = laneRepository.findById(laneId).get()
+        lane.aiLaneSavedBy = memberId
+
+        likeLane(memberId, laneId)
+
+        laneRepository.save(lane)
+    }
+
+    @Transactional
+    fun unLikeAILane(
+        memberId: Long,
+        laneId: Long,
+    ) {
+        val lane = laneRepository.findById(laneId).get()
+        lane.aiLaneSavedBy = null
+
+        unlikeLane(memberId, laneId)
+
+        laneRepository.save(lane)
+    }
+
     fun isTourAreaLikedByMember(
         memberId: Long,
         tourAreaId: Long,
