@@ -38,6 +38,7 @@ class LikeController(
                     it.tripThemeConstants,
                     it.likes,
                     it.image,
+                    it.days,
                 )
             },
         )
