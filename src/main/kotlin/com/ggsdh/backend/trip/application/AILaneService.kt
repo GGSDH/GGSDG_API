@@ -5,11 +5,11 @@ import com.ggsdh.backend.trip.application.dto.request.AIRequest
 import com.ggsdh.backend.trip.application.dto.request.AIRequestMessage
 import com.ggsdh.backend.trip.application.dto.request.AITourArea
 import com.ggsdh.backend.trip.application.dto.request.AIUserMessage
+import com.ggsdh.backend.trip.application.dto.request.AIUserRequest
 import com.ggsdh.backend.trip.application.dto.response.ChatCompletionResponse
 import com.ggsdh.backend.trip.application.dto.response.ParsedContent
 import com.ggsdh.backend.trip.domain.Lane
 import com.ggsdh.backend.trip.domain.LaneMapping
-import com.ggsdh.backend.trip.domain.constants.SigunguCode
 import com.ggsdh.backend.trip.infrastructure.LaneMappingRepository
 import com.ggsdh.backend.trip.infrastructure.LaneRepository
 import com.ggsdh.backend.trip.presentation.dto.AIResponseDto
@@ -31,15 +31,18 @@ class AILaneService(
     private val openaiApiKey: String,
     private val laneService: LaneService,
 ) {
-    fun generateAILane(): AIResponseDto {
+    fun generateAILane(request: AIUserRequest): AIResponseDto {
         val restTemplate = RestTemplate()
 
         val tourAreas =
-            tourAreaService.getAllBySigunguCodes(
-                listOf(
-                    SigunguCode.GURI.name,
-                ),
-            )
+            tourAreaService
+                .getAllBySigunguCodes(
+                    request.sigunguCode.map {
+                        it.name
+                    },
+                ).filter {
+                    it.tripThemeConstants in request.tripThemeConstants
+                }
 
         val aiTourData =
             tourAreas.map {
@@ -57,7 +60,7 @@ class AILaneService(
 
         val aiUserMessage =
             AIUserMessage(
-                5,
+                request.days,
                 aiTourData,
             )
         val aiRequest =
@@ -167,26 +170,34 @@ class AILaneService(
 
         val laneMappings =
             parsedContent.days
-                .flatMap {
-                    it.tripAreaNames
-                }.mapIndexedNotNull { index, dayPlan ->
-                    val laneMapping = LaneMapping()
-                    laneMapping.sequence = (index + 1).toLong()
-                    laneMapping.lane = lane
-                    laneMapping.tourArea = tourAreas.firstOrNull { it.name == dayPlan }
-
-                    if (laneMapping.tourArea == null) {
-                        return@mapIndexedNotNull null
-                    }
-                    laneMapping
+                .flatMap { dayPlan ->
+                    dayPlan.tripAreaNames
+                        .map {
+                            it to dayPlan.day
+                        }.mapIndexedNotNull { index, dayPlan ->
+                            val laneMapping = LaneMapping()
+                            laneMapping.sequence = (index + 1).toLong()
+                            laneMapping.lane = lane
+                            laneMapping.tourArea = tourAreas.firstOrNull { it.name == dayPlan.first }
+                            laneMapping.day = dayPlan.second
+                            if (laneMapping.tourArea == null) {
+                                return@mapIndexedNotNull null
+                            }
+                            laneMapping
+                        }
                 }
 
         val saved = laneRepository.save(lane)
         laneMappingRepository.saveAll(laneMappings)
 
+        val laneResponse = laneService.getSpecificLaneResponse(saved.id!!)
+
         return AIResponseDto(
             parsedContent,
-            laneService.getSpecificLaneResponse(saved.id!!),
+            laneResponse
+                .groupBy {
+                    it.day
+                },
             saved.id!!,
         )
     }

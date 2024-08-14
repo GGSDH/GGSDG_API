@@ -53,6 +53,7 @@ class LaneService(
                         it.tourArea!!.likes,
                         false,
                     ),
+                    it.day,
                 )
             }.toList()
     }

@@ -3,6 +3,12 @@ package com.ggsdh.backend.trip.application.dto.request
 import com.ggsdh.backend.trip.domain.constants.SigunguCode
 import com.ggsdh.backend.trip.domain.constants.TripThemeConstants
 
+class AIUserRequest(
+    val days: Int,
+    val sigunguCode: List<SigunguCode>,
+    val tripThemeConstants: List<TripThemeConstants>,
+)
+
 class AIRequestMessage(
     val role: String,
     val content: String,

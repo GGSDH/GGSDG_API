@@ -6,7 +6,6 @@ import jakarta.persistence.*
 @Entity
 @Table(name = "TB_LANE_MAPPING")
 class LaneMapping : BaseEntity() {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "lane_mapping_id")
@@ -14,6 +13,9 @@ class LaneMapping : BaseEntity() {
 
     @Column(nullable = false)
     var sequence: Long? = null
+
+    @Column(name = "day")
+    var day: Int = 1
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "lane_id")

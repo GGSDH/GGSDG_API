@@ -5,6 +5,7 @@ import com.ggsdh.backend.global.security.annotation.AuthId
 import com.ggsdh.backend.trip.application.AILaneService
 import com.ggsdh.backend.trip.application.LaneService
 import com.ggsdh.backend.trip.application.LikeService
+import com.ggsdh.backend.trip.application.dto.request.AIUserRequest
 import com.ggsdh.backend.trip.application.dto.response.LaneResponses
 import com.ggsdh.backend.trip.application.dto.response.LaneSpecificResponse
 import com.ggsdh.backend.trip.presentation.dto.AIResponseDto
@@ -12,6 +13,7 @@ import jakarta.transaction.Transactional
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
@@ -63,8 +65,9 @@ class LaneController(
     @GetMapping("/aiLane")
     fun getAiLane(
         @AuthId id: Long,
+        @RequestBody request: AIUserRequest,
     ): BaseResponse<AIResponseDto> {
-        val laneResponse = aiLaneService.generateAILane()
+        val laneResponse = aiLaneService.generateAILane(request)
 
         return BaseResponse.success(laneResponse)
     }

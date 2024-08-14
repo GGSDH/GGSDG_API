@@ -5,6 +5,6 @@ import com.ggsdh.backend.trip.application.dto.response.ParsedContent
 
 class AIResponseDto(
     val data: ParsedContent,
-    val laneSpecificResponse: List<LaneSpecificResponse>,
+    val laneSpecificResponse: Map<Int, List<LaneSpecificResponse>>,
     val id: Long,
 )
