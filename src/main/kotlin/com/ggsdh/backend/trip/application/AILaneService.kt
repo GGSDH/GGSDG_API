@@ -26,7 +26,7 @@ class AILaneService(
 //        private val openaiApiKey: String,
         private val laneService: LaneService,
 ) {
-    fun generateAILane(request: AIUserRequest): AIResponseDto {
+    fun generateAILane(id: Long, request: AIUserRequest): AIResponseDto {
         val restTemplate = RestTemplate()
 
         val tourAreas =
@@ -185,7 +185,7 @@ class AILaneService(
         val saved = laneRepository.save(lane)
         laneMappingRepository.saveAll(laneMappings)
 
-        val laneResponse = laneService.getSpecificLaneResponse(saved.id!!)
+        val laneResponse = laneService.getSpecificLaneResponse(id, saved.id!!)
 
         return AIResponseDto(
                 parsedContent,

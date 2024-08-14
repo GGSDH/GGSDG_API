@@ -14,18 +14,19 @@ import org.springframework.stereotype.Service
 
 @Service
 class LaneService(
-    private val laneRepository: LaneRepository,
-    private val laneMappingRepository: LaneMappingRepository,
-    private val qLaneRepository: QLaneRepository,
-    private val memberRepository: MemberRepository,
+        private val laneRepository: LaneRepository,
+        private val laneMappingRepository: LaneMappingRepository,
+        private val qLaneRepository: QLaneRepository,
+        private val memberRepository: MemberRepository,
+        private val likeService: LikeService
 ) {
     fun findLaneById(id: Long): LaneResponses? = qLaneRepository.findLaneById(id)
 
     fun getThemeLane(id: Long): List<LaneResponses> {
         val member =
-            memberRepository
-                .findById(id)
-                .orElseThrow { BusinessException(MemberError.NOT_FOUND) }
+                memberRepository
+                        .findById(id)
+                        .orElseThrow { BusinessException(MemberError.NOT_FOUND) }
 
         return qLaneRepository.getThemeLanesByMemberId(id)
     }
@@ -37,24 +38,28 @@ class LaneService(
         return lanes
     }
 
-    fun getSpecificLaneResponse(laneId: Long): List<LaneSpecificResponse> {
+    fun getSpecificLaneResponse(
+            id: Long,
+            laneId: Long
+    ): List<LaneSpecificResponse> {
+        val likedTourAreaIds = likeService.getAllLikedTourAreaIdsByMember(id)
         val laneMappings = laneMappingRepository.findAllByLaneId(laneId)
         return laneMappings
-            .map {
-                LaneSpecificResponse(
-                    it.sequence,
-                    it.lane!!.name,
-                    TourAreaResponse(
-                        it.tourArea!!.id,
-                        it.tourArea!!.name,
-                        it.tourArea!!.latitude,
-                        it.tourArea!!.longitude,
-                        it.tourArea!!.image,
-                        it.tourArea!!.likes,
-                        false,
-                    ),
-                    it.day,
-                )
-            }.toList()
+                .map {
+                    LaneSpecificResponse(
+                            it.sequence,
+                            it.lane!!.name,
+                            TourAreaResponse(
+                                    it.tourArea!!.id,
+                                    it.tourArea!!.name,
+                                    it.tourArea!!.latitude,
+                                    it.tourArea!!.longitude,
+                                    it.tourArea!!.image,
+                                    it.tourArea!!.likes,
+                                    likedTourAreaIds.contains(it.tourArea!!.id!!),
+                            ),
+                            it.day,
+                    )
+                }.toList()
     }
 }
