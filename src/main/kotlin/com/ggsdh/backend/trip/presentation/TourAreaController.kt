@@ -5,13 +5,16 @@ import com.ggsdh.backend.global.security.annotation.AuthId
 import com.ggsdh.backend.trip.application.LaneService
 import com.ggsdh.backend.trip.application.LikeService
 import com.ggsdh.backend.trip.application.TourAreaService
+import com.ggsdh.backend.trip.application.dto.request.TourAreaSearchRequest
 import com.ggsdh.backend.trip.presentation.dto.DetailedTourAreaOutputDto
 import com.ggsdh.backend.trip.presentation.dto.LaneResponseDto
+import com.ggsdh.backend.trip.presentation.dto.tourArea.TourAreaResponseDto
 import com.ggsdh.backend.trip.presentation.dto.tourArea.toResponseDto
 import jakarta.transaction.Transactional
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
@@ -78,5 +81,22 @@ class TourAreaController(
         likeService.unlikeTourArea(memberId, tourAreaId)
 
         return BaseResponse.success(true)
+    }
+
+    @GetMapping("/search")
+    fun search(
+        @AuthId memberId: Long,
+        @RequestBody request: TourAreaSearchRequest,
+    ): BaseResponse<List<TourAreaResponseDto>> {
+        val tourAreas = tourAreaService.search(request)
+        val likes = likeService.getAllLikedTourAreaIdsByMember(memberId)
+
+        return BaseResponse.success(
+            tourAreas.map {
+                it.toResponseDto(
+                    likes,
+                )
+            },
+        )
     }
 }

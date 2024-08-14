@@ -2,7 +2,9 @@ package com.ggsdh.backend.trip.application
 
 import com.ggsdh.backend.global.exception.error.BusinessException
 import com.ggsdh.backend.global.exception.error.GlobalError
+import com.ggsdh.backend.trip.application.dto.request.TourAreaSearchRequest
 import com.ggsdh.backend.trip.domain.TourArea
+import com.ggsdh.backend.trip.domain.constants.SigunguCode
 import com.ggsdh.backend.trip.domain.constants.TripThemeConstants
 import com.ggsdh.backend.trip.infrastructure.TourAreaRepository
 import org.springframework.stereotype.Service
@@ -11,7 +13,21 @@ import org.springframework.stereotype.Service
 class TourAreaService(
     private val tourAreaRepository: TourAreaRepository,
 ) {
-    fun getAllBySigunguCodes(sigunguCodes: List<String>): List<TourArea> = tourAreaRepository.findAllBySigunguCodeIn(sigunguCodes)
+    fun search(request: TourAreaSearchRequest): List<TourArea> {
+        val tourAreas =
+            if (request.sigunguCode.isEmpty()) {
+                tourAreaRepository.findAllByTripThemeConstant(request.tripThemeConstant)
+            } else {
+                tourAreaRepository.findAllBySigunguCodeInAndTripThemeConstant(
+                    request.sigunguCode,
+                    request.tripThemeConstant,
+                )
+            }
+
+        return tourAreas
+    }
+
+    fun getAllBySigunguCodes(sigunguCodes: List<SigunguCode>): List<TourArea> = tourAreaRepository.findAllBySigunguCodeIn(sigunguCodes)
 
     fun getTourAreaById(tourAreaId: Long): TourArea =
         tourAreaRepository.findById(tourAreaId).orElseThrow {

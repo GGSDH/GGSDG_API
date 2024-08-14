@@ -37,9 +37,7 @@ class AILaneService(
         val tourAreas =
             tourAreaService
                 .getAllBySigunguCodes(
-                    request.sigunguCode.map {
-                        it.name
-                    },
+                    request.sigunguCode,
                 ).filter {
                     it.tripThemeConstants in request.tripThemeConstants
                 }
