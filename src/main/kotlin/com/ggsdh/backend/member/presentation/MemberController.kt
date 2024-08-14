@@ -8,6 +8,7 @@ import com.ggsdh.backend.member.application.dto.request.MemberRoleRequest
 import com.ggsdh.backend.member.presentation.dto.MemberResponse
 import com.ggsdh.backend.member.presentation.dto.NicknameChangeRequest
 import jakarta.transaction.Transactional
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
@@ -21,6 +22,11 @@ import org.springframework.web.bind.annotation.RestController
 class MemberController(
     private val memberService: MemberService,
 ) {
+    @DeleteMapping("/member")
+    fun withdraw(
+        @AuthId id: Long,
+    ): BaseResponse<Boolean> = BaseResponse.success(memberService.withdraw(id))
+
     @PutMapping("/member/nickname")
     fun updateNickname(
         @AuthId id: Long,

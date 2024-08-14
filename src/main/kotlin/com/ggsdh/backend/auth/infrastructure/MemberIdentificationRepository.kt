@@ -6,17 +6,20 @@ import org.springframework.stereotype.Repository
 
 @Repository
 class MemberIdentificationRepository(
-        private val memberIdentificationJpaRepository: MemberIdentificationJpaRepository,
+    private val memberIdentificationJpaRepository: MemberIdentificationJpaRepository,
 ) {
-    fun findMemberByIdentification(memberIdentification: MemberIdentification): Member? {
-        return when (memberIdentification.type) {
+    fun findMemberByIdentification(memberIdentification: MemberIdentification): Member? =
+        when (memberIdentification.type) {
             ProviderType.KAKAO ->
                 memberIdentificationJpaRepository.findByKakaoId(
-                        memberIdentification.kakaoId!!,
+                    memberIdentification.kakaoId!!,
                 )
 
-            ProviderType.APPLE -> TODO()
+            ProviderType.APPLE ->
+                memberIdentificationJpaRepository.findBySub(
+                    memberIdentification.sub!!,
+                )
+
             ProviderType.DUMMY -> TODO()
         }?.member
-    }
 }
