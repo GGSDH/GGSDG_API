@@ -35,6 +35,7 @@ class CustomRequestMatcher {
             OrRequestMatcher(
                     AntPathRequestMatcher("/api/v1/search/**"),
                     AntPathRequestMatcher("/api/v1/photobook"),
-                    AntPathRequestMatcher("/api/v1/photobook/**")
+                    AntPathRequestMatcher("/api/v1/photobook/**"),
+                    AntPathRequestMatcher("/api/v1/trip/**")
             )
 }

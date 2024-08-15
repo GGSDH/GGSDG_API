@@ -34,5 +34,6 @@ enum class SigunguCode(
     PYEONGTAEK(28L, "평택시"),
     POCHEON(29L, "포천시"),
     HANAM(30L, "하남시"),
-    HWASEONG(31L, "화성시")
+    HWASEONG(31L, "화성시"),
+    UNKNOWN(100L, "알 수 없음")
 }
