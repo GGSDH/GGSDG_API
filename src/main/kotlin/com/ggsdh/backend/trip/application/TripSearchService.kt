@@ -3,6 +3,7 @@ package com.ggsdh.backend.trip.application
 import com.ggsdh.backend.global.exception.error.BusinessException
 import com.ggsdh.backend.trip.application.dto.response.SearchedResponse
 import com.ggsdh.backend.trip.domain.PopularKeyword
+import com.ggsdh.backend.trip.domain.constants.SigunguCode
 import com.ggsdh.backend.trip.exception.TripError
 import com.ggsdh.backend.trip.infrastructure.LaneMappingRepository
 import com.ggsdh.backend.trip.infrastructure.LaneRepository
@@ -32,14 +33,18 @@ class TripSearchService(
         }
 
         val lanes = foundLanes.map {
-            SearchedResponse(it.id, "LANE", it.tripThemeConstants, it.name, laneMappingRepository.findAllByLaneId(it.id!!).get(0).tourArea!!.sigunguCode)
+            try {
+                SearchedResponse(it.id, "LANE", it.tripThemeConstants, it.name, laneMappingRepository.findAllByLaneId(it.id!!).get(0).tourArea!!.sigunguCode)
+            } catch (e: Exception) {
+                SearchedResponse(it.id, "LANE", it.tripThemeConstants, it.name, SigunguCode.UNKNOWN)
+            }
         }
 
         val tourAreas = foundTourAreas.map {
             SearchedResponse(it.id, "TOUR_AREA", it.tripThemeConstants, it.name, it.sigunguCode)
-        }.shuffled().take(30 - lanes.size)
+        }.shuffled()
 
-        val finalResult = lanes + tourAreas
+        val finalResult = (lanes + tourAreas).shuffled().take(30)
 
         val foundKeyword = popularKeywordRepository.findByKeyword(keyword)
 
