@@ -7,6 +7,7 @@ import com.ggsdh.backend.trip.application.TripThemeService
 import com.ggsdh.backend.trip.application.dto.request.KeywordRequest
 import com.ggsdh.backend.trip.application.dto.request.OnboardingRequest
 import com.ggsdh.backend.trip.application.dto.response.SearchedResponse
+import com.ggsdh.backend.trip.presentation.dto.KeywordResponse
 import com.ggsdh.backend.trip.presentation.dto.TripThemeOutputDto
 import jakarta.transaction.Transactional
 import org.springframework.web.bind.annotation.*
@@ -43,6 +44,12 @@ class TripController(
     @PostMapping("/trip/search")
     fun getSearchResponse(@RequestBody keywordRequest: KeywordRequest): BaseResponse<List<SearchedResponse>> {
         val result = tripSearchService.searchByKeyword(keywordRequest.keyword)
+        return BaseResponse.success(result)
+    }
+
+    @GetMapping("/trip/popularKeyword")
+    fun getPopularKeywordResponse(): BaseResponse<List<KeywordResponse>> {
+        val result = tripSearchService.getPopularKeywords()
         return BaseResponse.success(result)
     }
 }

@@ -8,6 +8,7 @@ import com.ggsdh.backend.trip.infrastructure.LaneMappingRepository
 import com.ggsdh.backend.trip.infrastructure.LaneRepository
 import com.ggsdh.backend.trip.infrastructure.PopularKeywordRepository
 import com.ggsdh.backend.trip.infrastructure.TourAreaRepository
+import com.ggsdh.backend.trip.presentation.dto.KeywordResponse
 import org.springframework.stereotype.Service
 
 @Service
@@ -51,6 +52,13 @@ class TripSearchService(
         }
 
         return finalResult
+    }
+
+    fun getPopularKeywords(): List<KeywordResponse> {
+        val keywords = popularKeywordRepository.findPopularKeywords()
+        return keywords.map {
+            KeywordResponse(it.keyword, it.count)
+        }
     }
 
     private fun validateKeyword(keyword: String) {
