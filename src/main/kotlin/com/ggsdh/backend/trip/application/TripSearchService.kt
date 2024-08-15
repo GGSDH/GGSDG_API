@@ -46,10 +46,10 @@ class TripSearchService(
 
         val finalResult = (lanes + tourAreas).shuffled().take(30)
 
-        val foundKeyword = popularKeywordRepository.findByKeyword(keyword)
+        val foundKeyword = popularKeywordRepository.findByKeyword(trimmedKeyword)
 
         if (foundKeyword == null) {
-            val newKeyword = PopularKeyword(keyword, 1L)
+            val newKeyword = PopularKeyword(trimmedKeyword, 1L)
             popularKeywordRepository.save(newKeyword)
         } else {
             foundKeyword.count += 1L
