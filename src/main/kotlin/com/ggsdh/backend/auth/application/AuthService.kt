@@ -2,7 +2,6 @@ package com.ggsdh.backend.auth.application
 
 import com.ggsdh.backend.auth.application.dto.request.LoginRequest
 import com.ggsdh.backend.auth.application.dto.response.AuthResponse
-import com.ggsdh.backend.auth.application.dto.response.TokenResponse
 import com.ggsdh.backend.auth.domain.constants.Role
 import com.ggsdh.backend.auth.infrastructure.MemberIdentificationRepository
 import com.ggsdh.backend.auth.infrastructure.MemberIdentificationServiceFactory
@@ -17,36 +16,36 @@ import org.springframework.stereotype.Component
 @Component
 @Transactional
 class AuthService(
-    private val jwtFactory: JwtFactory,
-    private val memberRepository: MemberRepository,
-    private val memberIdentificationRepository: MemberIdentificationRepository,
-    private val memberIdentificationServiceFactory: MemberIdentificationServiceFactory,
+        private val jwtFactory: JwtFactory,
+        private val memberRepository: MemberRepository,
+        private val memberIdentificationRepository: MemberIdentificationRepository,
+        private val memberIdentificationServiceFactory: MemberIdentificationServiceFactory,
 ) {
     fun refreshToken(id: Long): AuthResponse {
         val member = memberRepository.findById(id).orElseThrow { RuntimeException("Member not found") }
         val accessToken = jwtFactory.createAccessToken(member)
         return AuthResponse(
-            TokenResponse(accessToken),
-            member.role,
+                accessToken,
+                member.role,
         )
     }
 
     fun login(loginRequest: LoginRequest): AuthResponse {
         val memberIdentificationService =
-            memberIdentificationServiceFactory.create(
-                loginRequest.providerType,
-            )
+                memberIdentificationServiceFactory.create(
+                        loginRequest.providerType,
+                )
 
         val identification =
-            memberIdentificationService.toMemberIdentification(
-                loginRequest.accessToken,
-                loginRequest.refreshToken,
-            )
+                memberIdentificationService.toMemberIdentification(
+                        loginRequest.accessToken,
+                        loginRequest.refreshToken,
+                )
 
         val member =
-            memberIdentificationRepository.findMemberByIdentification(
-                identification,
-            )
+                memberIdentificationRepository.findMemberByIdentification(
+                        identification,
+                )
 
         if (member == null) {
             val nickname = Nickname.generate()
@@ -55,15 +54,15 @@ class AuthService(
 
             val accessToken = jwtFactory.createAccessToken(savedMember)
             return AuthResponse(
-                TokenResponse(accessToken),
-                savedMember.role,
+                    accessToken,
+                    savedMember.role,
             )
         }
 
         val accessToken = jwtFactory.createAccessToken(member)
         return AuthResponse(
-            TokenResponse(accessToken),
-            member.role,
+                accessToken,
+                member.role,
         )
     }
 }

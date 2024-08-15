@@ -7,51 +7,46 @@ import com.ggsdh.backend.auth.domain.constants.ProviderType
 import com.ggsdh.backend.auth.presentation.dto.KakaoLoginRequest
 import com.ggsdh.backend.global.dto.BaseResponse
 import com.ggsdh.backend.global.security.annotation.AuthId
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/v1/oauth")
 class OAuthController(
-    private val authService: AuthService,
+        private val authService: AuthService,
 ) {
     @GetMapping("/refresh")
     fun refreshToken(
-        @AuthId id: Long,
+            @AuthId id: Long,
     ): BaseResponse<AuthResponse> {
         val token = authService.refreshToken(id)
 
         return BaseResponse.success(
-            AuthResponse.of(
-                token.token.accessToken,
-                token.role,
-            ),
+                AuthResponse.of(
+                        token.token,
+                        token.role,
+                ),
         )
     }
 
     @PostMapping("/{provider}/login")
     fun kakaoLogin(
-        @PathVariable provider: String,
-        @RequestBody request: KakaoLoginRequest,
+            @PathVariable provider: String,
+            @RequestBody request: KakaoLoginRequest,
     ): BaseResponse<AuthResponse> {
         val token =
-            authService.login(
-                LoginRequest(
-                    providerType = ProviderType.valueOf(provider),
-                    accessToken = request.accessToken,
-                    refreshToken = request.refreshToken,
-                ),
-            )
+                authService.login(
+                        LoginRequest(
+                                providerType = ProviderType.valueOf(provider),
+                                accessToken = request.accessToken,
+                                refreshToken = request.refreshToken,
+                        ),
+                )
 
         return BaseResponse.success(
-            AuthResponse.of(
-                token.token.accessToken,
-                token.role,
-            ),
+                AuthResponse.of(
+                        token.token,
+                        token.role,
+                ),
         )
     }
 }
