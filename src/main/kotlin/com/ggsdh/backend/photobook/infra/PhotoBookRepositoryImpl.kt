@@ -1,5 +1,6 @@
 package com.ggsdh.backend.photobook.infra
 
+import com.ggsdh.backend.photobook.application.dto.PhotoTicketResponse
 import com.ggsdh.backend.photobook.domain.Location
 import com.ggsdh.backend.photobook.domain.Photo
 import com.ggsdh.backend.photobook.domain.PhotoBook
@@ -105,9 +106,27 @@ class PhotoBookRepositoryImpl(
     }
 
     override fun getAllPhotobookWithoutPhototicket(memberId: Long): List<PhotoBook> {
-        jpaPhotoBookRepository.findAllWithoutPhototicketByMemberId(memberId)
-            .map { it.toDomain(emptyList()) }
-            .let { return it }
+        val entities = jpaPhotoBookRepository.findAllWithoutPhototicketByMemberId(memberId)
+
+        return entities.map { entity ->
+            val photos = jpaPhotoRepository.findAllByPhotobookId(entity.id).map { it.toDomain() }
+
+            entity.toDomain(photos)
+        }
+    }
+
+    override fun getAllPhototickets(memberId: Long): List<PhotoTicketResponse> {
+        val entities = jpaPhotoBookRepository.findAllWithPhotoTicket(memberId)
+
+        return entities.mapNotNull { entity ->
+            val photo = jpaPhotoRepository.findAllByPhotobookIdAndIsPhototicket(entity.id, true)
+                .firstOrNull() ?: return@mapNotNull null
+
+            PhotoTicketResponse(
+                photoBook = entity.toDomain(listOf(photo.toDomain())),
+                phototicket = photo.toDomain(),
+            )
+        }
     }
 }
 
@@ -122,6 +141,7 @@ fun PhotoEntity.toDomain(): Photo =
                 null
             },
         dateTime = this.date,
+        isPhototicket = this.isPhototicket,
     )
 
 fun Photo.toEntity(photobookId: Long): PhotoEntity =

@@ -9,7 +9,7 @@ class PhotoBook(
     val title: String,
     val startDateTime: LocalDateTime,
     val endDateTime: LocalDateTime,
-    val photos: List<Photo>,
+    var photos: List<Photo>,
 ) {
     fun getDailyPhotoGroups(): List<DailyPhotoGroup> {
         val map: MutableMap<

@@ -24,4 +24,18 @@ interface JpaPhotoBookRepository : JpaRepository<PhotobookEntity, Long> {
         """
     )
     fun findAllWithoutPhototicketByMemberId(memberId: Long): List<PhotobookEntity>
+
+    @Query(
+        """
+        SELECT pb
+        FROM PhotobookEntity pb
+        WHERE pb.memberId = :memberId
+        AND EXISTS (
+            SELECT pt
+            FROM PhotoEntity pt
+            WHERE pt.isPhototicket = true and pt.photobookId = pb.id
+        )
+        """
+    )
+    fun findAllWithPhotoTicket(memberId: Long): List<PhotobookEntity>
 }

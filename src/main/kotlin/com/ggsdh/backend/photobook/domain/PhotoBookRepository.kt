@@ -1,5 +1,7 @@
 package com.ggsdh.backend.photobook.domain
 
+import com.ggsdh.backend.photobook.application.dto.PhotoTicketResponse
+
 interface PhotoBookRepository {
     fun delete(
         memberId: Long,
@@ -24,4 +26,5 @@ interface PhotoBookRepository {
     ): Boolean
 
     fun getAllPhotobookWithoutPhototicket(memberId: Long): List<PhotoBook>
+    fun getAllPhototickets(memberId: Long): List<PhotoTicketResponse>
 }
