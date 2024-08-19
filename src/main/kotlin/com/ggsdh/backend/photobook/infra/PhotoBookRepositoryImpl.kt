@@ -103,6 +103,12 @@ class PhotoBookRepositoryImpl(
 
         return true
     }
+
+    override fun getAllPhotobookWithoutPhototicket(memberId: Long): List<PhotoBook> {
+        jpaPhotoBookRepository.findAllWithoutPhototicketByMemberId(memberId)
+            .map { it.toDomain(emptyList()) }
+            .let { return it }
+    }
 }
 
 fun PhotoEntity.toDomain(): Photo =

@@ -90,4 +90,12 @@ class PhotoBookService(
         memberId: Long,
         photoId: List<String>,
     ) = photoBookRepository.deletePhotos(memberId, photoId)
+
+    fun getRandomPhotobookWithoutPhotoTicket(
+        memberId: Long,
+    ): PhotoBook? {
+        val photoBooks = photoBookRepository.getAllPhotobookWithoutPhototicket(memberId)
+
+        return photoBooks.randomOrNull()
+    }
 }

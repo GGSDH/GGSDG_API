@@ -20,6 +20,8 @@ class PhotoEntity(
     val location: String?,
     val date: LocalDateTime,
     val photobookId: Long?,
+    @Column(name = "is_phototicket", columnDefinition = "boolean default false")
+    val isPhototicket: Boolean = false,
 ) : BaseEntity() {
     companion object {
         fun of(

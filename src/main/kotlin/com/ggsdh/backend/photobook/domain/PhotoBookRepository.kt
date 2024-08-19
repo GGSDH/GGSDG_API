@@ -22,4 +22,6 @@ interface PhotoBookRepository {
         memberId: Long,
         photoId: List<String>,
     ): Boolean
+
+    fun getAllPhotobookWithoutPhototicket(memberId: Long): List<PhotoBook>
 }

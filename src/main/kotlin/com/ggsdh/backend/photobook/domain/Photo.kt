@@ -8,11 +8,12 @@ class Photo(
     val path: String,
     val location: Location?,
     val dateTime: LocalDateTime,
+    val isPhototicket: Boolean = false,
 ) {
     companion object {
         fun create(
             path: String,
             dateTime: LocalDateTime,
-        ): Photo = Photo(UUID.randomUUID().toString(), path, null, dateTime)
+        ): Photo = Photo(UUID.randomUUID().toString(), path, null, dateTime, false)
     }
 }
