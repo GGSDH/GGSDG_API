@@ -7,6 +7,7 @@ import com.ggsdh.backend.trip.application.dto.response.LaneResponses
 import com.ggsdh.backend.trip.application.dto.response.LaneSpecificResponse
 import com.ggsdh.backend.trip.application.dto.response.TourAreaResponse
 import com.ggsdh.backend.trip.domain.Lane
+import com.ggsdh.backend.trip.domain.constants.SigunguCode
 import com.ggsdh.backend.trip.infrastructure.LaneMappingRepository
 import com.ggsdh.backend.trip.infrastructure.LaneRepository
 import com.ggsdh.backend.trip.infrastructure.QLaneRepository
@@ -22,13 +23,16 @@ class LaneService(
 ) {
     fun findLaneById(id: Long): LaneResponses? = qLaneRepository.findLaneById(id)
 
-    fun getThemeLane(id: Long): List<LaneResponses> {
+    fun getThemeLane(
+            id: Long,
+            sigunguCodes: List<SigunguCode>?
+    ): List<LaneResponses> {
         val member =
                 memberRepository
                         .findById(id)
                         .orElseThrow { BusinessException(MemberError.NOT_FOUND) }
 
-        return qLaneRepository.getThemeLanesByMemberId(id)
+        return qLaneRepository.getThemeLanesByMemberId(id, sigunguCodes)
     }
 
     fun getAllLanesByTourAreaId(tourAreaId: Long): List<Lane> {
