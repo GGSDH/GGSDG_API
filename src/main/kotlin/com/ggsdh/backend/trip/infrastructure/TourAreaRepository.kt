@@ -23,6 +23,9 @@ interface TourAreaRepository : JpaRepository<TourArea, Long> {
     @Query("SELECT t FROM TourArea t WHERE t.ranking IS NOT NULL ORDER BY t.ranking")
     fun findAllByRankingArea(): List<TourArea>
 
+    @Query("SELECT t FROM TourArea t WHERE t.ranking IS NOT NULL AND t.sigunguCode IN :sigunguCodes ORDER BY t.ranking")
+    fun findAllByRankingAreaBySigunguCodes(sigunguCodes: List<SigunguCode>): List<TourArea>
+
     @Query("SELECT t FROM TourArea t WHERE REPLACE(t.name, ' ', '') LIKE CONCAT('%', :keyword, '%')")
     fun findByNameContainingIgnoreSpaces(@Param("keyword") keyword: String): List<TourArea>
 }
