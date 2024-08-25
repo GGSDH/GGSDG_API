@@ -1,5 +1,6 @@
 package com.ggsdh.backend.photobook.presentation
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.ggsdh.backend.global.dto.BaseResponse
 import com.ggsdh.backend.global.exception.error.BusinessException
 import com.ggsdh.backend.global.exception.error.GlobalError
@@ -8,6 +9,7 @@ import com.ggsdh.backend.photobook.application.PhotoBookService
 import com.ggsdh.backend.photobook.application.PhototicketService
 import com.ggsdh.backend.photobook.application.dto.PhotoTicketResponse
 import com.ggsdh.backend.photobook.domain.PhotoBook
+import com.ggsdh.backend.photobook.presentation.dto.PhotoBookResponse
 import jakarta.transaction.Transactional
 import org.springframework.web.bind.annotation.*
 
@@ -17,15 +19,28 @@ import org.springframework.web.bind.annotation.*
 class PhotoTicketController(
     private val photobookService: PhotoBookService,
     private val phototicketService: PhototicketService,
+    private val objectMapper: ObjectMapper,
 ) {
     @GetMapping("/random")
     fun getRandomPhotobook(
         @AuthId memberId: Long,
-    ): BaseResponse<PhotoBook> {
+    ): BaseResponse<PhotoBookResponse> {
         val photoBook = photobookService.getRandomPhotobookWithoutPhotoTicket(memberId)
             ?: throw BusinessException(GlobalError.PHOTOBOOK_NOT_FOUND)
 
-        return BaseResponse.success(photoBook)
+
+        return BaseResponse.success(
+            PhotoBookResponse(
+                photoBook.id,
+                photoBook.title,
+                photoBook.startDateTime.toString(),
+                photoBook.endDateTime.toString(),
+                photoBook.getDailyPhotoGroups(),
+                photoBook.getLocation()
+                ,
+                photoBook.getPhotoTicket()
+            ),
+        )
     }
 
     @PostMapping("/{id}/save")
@@ -39,7 +54,7 @@ class PhotoTicketController(
     }
 
     @GetMapping()
-    fun getAllPhotoTickets(@AuthId memberId: Long): List<PhotoTicketResponse> {
-        return phototicketService.getAllPhototicketsByMemberId(memberId)
+    fun getAllPhotoTickets(@AuthId memberId: Long): BaseResponse<List<PhotoTicketResponse>> {
+        return BaseResponse.success(phototicketService.getAllPhototicketsByMemberId(memberId))
     }
 }

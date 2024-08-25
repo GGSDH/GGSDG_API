@@ -50,14 +50,9 @@ class PhotoBookController(
                     it.title,
                     it.startDateTime.toString(),
                     it.endDateTime.toString(),
-                    it.photos.first().path,
-                    it
-                        .getDailyPhotoGroups()
-                        .first()
-                        .hourlyPhotoGroups
-                        .first()
-                        .getDominantLocation()
-                        ?.name ?: "경기도",
+                    it.photos.firstOrNull()?.path ?: "",
+                    it.getLocation(),
+                    it.getPhotoTicket()
                 )
             },
         )
@@ -76,6 +71,8 @@ class PhotoBookController(
                 photoBook.startDateTime.toString(),
                 photoBook.endDateTime.toString(),
                 photoBook.getDailyPhotoGroups(),
+                photoBook.getLocation(),
+                photoBook.getPhotoTicket()
             ),
         )
     }
@@ -99,6 +96,8 @@ class PhotoBookController(
                 photoBook.startDateTime.toString(),
                 photoBook.endDateTime.toString(),
                 photoBook.getDailyPhotoGroups(),
+                photoBook.getLocation(),
+                photoBook.getPhotoTicket()
             ),
         )
     }

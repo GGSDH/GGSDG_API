@@ -11,11 +11,26 @@ class PhotoBook(
     val endDateTime: LocalDateTime,
     var photos: List<Photo>,
 ) {
+    fun getPhotoTicket(): Photo? {
+        return this.photos.find { it.isPhototicket }
+    }
+
+    fun getLocation(): Location {
+
+
+        return this.photos.randomOrNull()?.location ?: Location(
+            0.0,
+            0.0,
+                "경기도",
+                "경기도"
+            )
+    }
+
     fun getDailyPhotoGroups(): List<DailyPhotoGroup> {
         val map: MutableMap<
-            String,
-            MutableMap<String, MutableList<Photo>>,
-        > = mutableMapOf()
+                String,
+                MutableMap<String, MutableList<Photo>>,
+                > = mutableMapOf()
 
         this.photos
             .sortedBy {
