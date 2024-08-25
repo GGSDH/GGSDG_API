@@ -42,18 +42,10 @@ class PhotoBookController(
     @GetMapping()
     fun getAllPhotoBooks(
         @AuthId id: Long,
-    ): BaseResponse<List<PhotoBookListingResponse>> =
+    ): BaseResponse<List<PhotoBookResponse>> =
         BaseResponse.success(
             photoLocationService.getAllPhotoBooks(id).map {
-                PhotoBookListingResponse(
-                    it.id,
-                    it.title,
-                    it.startDateTime.toString(),
-                    it.endDateTime.toString(),
-                    it.photos.firstOrNull()?.path ?: "",
-                    it.getLocation(),
-                    it.getPhotoTicket()
-                )
+                PhotoBookResponse.from(it)
             },
         )
 
@@ -65,15 +57,7 @@ class PhotoBookController(
         val photoBook = photoLocationService.getPhotoBook(memberId, id)
 
         return BaseResponse.success(
-            PhotoBookResponse(
-                photoBook.id,
-                photoBook.title,
-                photoBook.startDateTime.toString(),
-                photoBook.endDateTime.toString(),
-                photoBook.getDailyPhotoGroups(),
-                photoBook.getLocation(),
-                photoBook.getPhotoTicket()
-            ),
+            PhotoBookResponse.from(photoBook)
         )
     }
 
@@ -90,15 +74,7 @@ class PhotoBookController(
                 )
 
         return BaseResponse.success(
-            PhotoBookResponse(
-                photoBook.id,
-                photoBook.title,
-                photoBook.startDateTime.toString(),
-                photoBook.endDateTime.toString(),
-                photoBook.getDailyPhotoGroups(),
-                photoBook.getLocation(),
-                photoBook.getPhotoTicket()
-            ),
+            PhotoBookResponse.from(photoBook)
         )
     }
 }

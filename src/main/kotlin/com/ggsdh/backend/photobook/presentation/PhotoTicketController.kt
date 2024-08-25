@@ -30,16 +30,7 @@ class PhotoTicketController(
 
 
         return BaseResponse.success(
-            PhotoBookResponse(
-                photoBook.id,
-                photoBook.title,
-                photoBook.startDateTime.toString(),
-                photoBook.endDateTime.toString(),
-                photoBook.getDailyPhotoGroups(),
-                photoBook.getLocation()
-                ,
-                photoBook.getPhotoTicket()
-            ),
+            PhotoBookResponse.from(photoBook)
         )
     }
 

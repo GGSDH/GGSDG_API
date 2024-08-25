@@ -15,15 +15,10 @@ class PhotoBook(
         return this.photos.find { it.isPhototicket }
     }
 
-    fun getLocation(): Location {
+    fun getLocation(): Location? {
 
 
-        return this.photos.randomOrNull()?.location ?: Location(
-            0.0,
-            0.0,
-                "경기도",
-                "경기도"
-            )
+        return this.photos.randomOrNull()?.location
     }
 
     fun getDailyPhotoGroups(): List<DailyPhotoGroup> {
