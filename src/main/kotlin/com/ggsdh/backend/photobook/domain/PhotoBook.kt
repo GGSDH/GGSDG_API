@@ -16,9 +16,7 @@ class PhotoBook(
     }
 
     fun getLocation(): Location? {
-
-
-        return this.photos.randomOrNull()?.location
+        return this.photos.firstOrNull()?.location
     }
 
     fun getDailyPhotoGroups(): List<DailyPhotoGroup> {
