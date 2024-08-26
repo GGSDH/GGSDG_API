@@ -96,6 +96,7 @@ class PhotoBookService(
     ): PhotoBook? {
         val photoBooks = photoBookRepository.getAllPhotobookWithoutPhototicket(memberId)
 
-        return photoBooks.randomOrNull()
+        println(photoBooks)
+        return photoBooks.random()
     }
 }

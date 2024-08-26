@@ -5,6 +5,7 @@ import com.ggsdh.backend.photobook.domain.Location
 import com.ggsdh.backend.photobook.domain.Photo
 import com.ggsdh.backend.photobook.domain.PhotoBook
 import com.ggsdh.backend.photobook.domain.PhotoBookRepository
+import com.ggsdh.backend.photobook.presentation.dto.PhotoBookResponse
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Repository
 import java.time.LocalDateTime
@@ -122,9 +123,10 @@ class PhotoBookRepositoryImpl(
             val photo = jpaPhotoRepository.findAllByPhotobookIdAndIsPhototicket(entity.id, true)
                 .firstOrNull() ?: return@mapNotNull null
 
+            val photobook = entity.toDomain(listOf(photo.toDomain()))
             PhotoTicketResponse(
-                photoBook = entity.toDomain(listOf(photo.toDomain())),
-                phototicket = photo.toDomain(),
+                photoBook = PhotoBookResponse.from(photobook),
+                photo = photo.toDomain(),
             )
         }
     }
@@ -135,11 +137,11 @@ fun PhotoEntity.toDomain(): Photo =
         id = this.id,
         path = this.path,
         location =
-            if (this.lat != null && this.lon != null) {
-                Location(this.lat!!, this.lon!!, this.location, "경기도")
-            } else {
-                null
-            },
+        if (this.lat != null && this.lon != null) {
+            Location(this.lat!!, this.lon!!, this.location, "경기도")
+        } else {
+            null
+        },
         dateTime = this.date,
         isPhototicket = this.isPhototicket,
     )

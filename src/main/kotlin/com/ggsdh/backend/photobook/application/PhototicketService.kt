@@ -7,6 +7,7 @@ import com.ggsdh.backend.photobook.domain.PhotoBookRepository
 import com.ggsdh.backend.photobook.infra.JpaPhotoBookRepository
 import com.ggsdh.backend.photobook.infra.JpaPhotoRepository
 import com.ggsdh.backend.photobook.infra.toDomain
+import com.ggsdh.backend.photobook.presentation.dto.PhotoBookResponse
 import org.springframework.stereotype.Service
 import kotlin.jvm.optionals.getOrNull
 
@@ -22,7 +23,8 @@ class PhototicketService(
     }
 
     fun save(photoId: String, memberId: Long): PhotoTicketResponse {
-        val photo = photoRepository.findById(photoId).orElseThrow { throw BusinessException(GlobalError.PHOTOBOOK_NOT_FOUND) }
+        val photo =
+            photoRepository.findById(photoId).orElseThrow { throw BusinessException(GlobalError.PHOTOBOOK_NOT_FOUND) }
 
 
         val photobook = photoBookService.getPhotoBook(memberId, photo.photobookId!!)
@@ -40,8 +42,8 @@ class PhototicketService(
         photobook.photos = listOf()
 
         return PhotoTicketResponse(
-            phototicket = photo.toDomain(),
-            photoBook =   photobook
+            photo = photo.toDomain(),
+            photoBook = PhotoBookResponse.from(photobook),
         )
     }
 }
