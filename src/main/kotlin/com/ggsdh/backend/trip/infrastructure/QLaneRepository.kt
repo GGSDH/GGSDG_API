@@ -64,7 +64,7 @@ class QLaneRepository(
         val lanes =
                 query
                         .selectDistinct(
-                                laneMapping.id,
+                                laneMapping.lane.id,
                         ).from(laneMapping)
                         .where(
                                 laneMapping.tourArea.id
