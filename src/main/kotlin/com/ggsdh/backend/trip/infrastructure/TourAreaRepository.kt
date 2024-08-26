@@ -3,6 +3,8 @@ package com.ggsdh.backend.trip.infrastructure
 import com.ggsdh.backend.trip.domain.TourArea
 import com.ggsdh.backend.trip.domain.constants.SigunguCode
 import com.ggsdh.backend.trip.domain.constants.TripThemeConstants
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
@@ -15,10 +17,11 @@ interface TourAreaRepository : JpaRepository<TourArea, Long> {
     fun findAllBySigunguCodeInAndTripThemeConstant(
             sigunguCodes: List<SigunguCode>,
             tripThemeConstant: TripThemeConstants,
-    ): List<TourArea>
+            pageable: Pageable
+    ): Page<TourArea>
 
     @Query("SELECT t FROM TourArea t WHERE t.tripThemeConstants = :tripThemeConstant")
-    fun findAllByTripThemeConstant(tripThemeConstant: TripThemeConstants): List<TourArea>
+    fun findAllByTripThemeConstant(tripThemeConstant: TripThemeConstants, pageable: Pageable): Page<TourArea>
 
     @Query("SELECT t FROM TourArea t WHERE t.ranking IS NOT NULL ORDER BY t.ranking")
     fun findAllByRankingArea(): List<TourArea>

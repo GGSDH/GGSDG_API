@@ -11,7 +11,12 @@ import com.ggsdh.backend.trip.presentation.dto.LaneResponseDto
 import com.ggsdh.backend.trip.presentation.dto.tourArea.TourAreaResponseDto
 import com.ggsdh.backend.trip.presentation.dto.tourArea.toResponseDto
 import jakarta.transaction.Transactional
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageImpl
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Pageable
 import org.springframework.web.bind.annotation.*
+import kotlin.random.Random
 
 @RestController
 @Transactional
@@ -82,16 +87,27 @@ class TourAreaController(
     fun search(
             @AuthId memberId: Long,
             @RequestBody request: TourAreaSearchRequest,
-    ): BaseResponse<List<TourAreaResponseDto>> {
-        val tourAreas = tourAreaService.search(request)
+            pageable: Pageable
+    ): BaseResponse<Page<TourAreaResponseDto>> {
+        val tourAreas = tourAreaService.search(request, pageable)
         val likes = likeService.getAllLikedTourAreaIdsByMember(memberId)
 
-        return BaseResponse.success(
-                tourAreas.map {
-                    it.toResponseDto(
-                            likes,
-                    )
-                },
+        // 각 TourArea 객체를 TourAreaResponseDto로 변환하고
+        // 변환된 결과를 리스트로 변환
+        val tourAreaResponseDtos = tourAreas.content.map { tourArea ->
+            tourArea.toResponseDto(likes)
+        }.toMutableList()
+
+        // 리스트의 순서를 랜덤하게 섞음
+        tourAreaResponseDtos.shuffle(Random(System.currentTimeMillis()))
+
+        // 랜덤하게 섞인 리스트로 Page 객체를 생성
+        val pagedTourAreaResponseDtos = PageImpl(
+                tourAreaResponseDtos,
+                PageRequest.of(tourAreas.number, tourAreas.size, tourAreas.sort),
+                tourAreas.totalElements
         )
+
+        return BaseResponse.success(pagedTourAreaResponseDtos)
     }
 }
