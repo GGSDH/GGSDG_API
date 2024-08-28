@@ -56,6 +56,7 @@ class LaneController(
                         lane.days,
                         lane.laneName,
                         lane.image,
+                        lane.tripThemeConstants,
                         specificLaneResponse,
                 ),
         )

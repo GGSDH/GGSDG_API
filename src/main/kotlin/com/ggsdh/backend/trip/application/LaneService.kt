@@ -61,6 +61,7 @@ class LaneService(
                                     it.tourArea!!.image,
                                     it.tourArea!!.likes,
                                     likedTourAreaIds.contains(it.tourArea!!.id!!),
+                                    it.tourArea!!.sigunguCode
                             ),
                             it.day,
                     )

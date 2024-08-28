@@ -61,6 +61,7 @@ class LikeController(
                     it.image,
                     it.likes,
                     true,
+                    it.sigunguCode
                 )
             },
         )

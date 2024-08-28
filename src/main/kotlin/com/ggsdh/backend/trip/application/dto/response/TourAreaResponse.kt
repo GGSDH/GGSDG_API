@@ -1,5 +1,7 @@
 package com.ggsdh.backend.trip.application.dto.response
 
+import com.ggsdh.backend.trip.domain.constants.SigunguCode
+
 data class TourAreaResponse(
         val tourAreaId: Long?,
         val tourAreaName: String,
@@ -8,4 +10,5 @@ data class TourAreaResponse(
         val image: String?,
         val likeCnt: Long?,
         val likedByMe: Boolean,
+        val sigunguCode: SigunguCode,
 )
