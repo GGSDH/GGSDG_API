@@ -24,7 +24,7 @@ class RestaurantService(
                 .map {
                     RandomRestaurantResponse(
                             it.id,
-                            it.firstMenuImage,
+                            it.firstMenuImage ?: it.image,
                             it.name,
                             it.likes,
                             it.sigunguCode.value,
