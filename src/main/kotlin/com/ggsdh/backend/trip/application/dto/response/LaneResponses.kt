@@ -10,3 +10,5 @@ data class LaneResponses(
     val image: String,
     val days: Int,
 )
+
+// softwareupdate —-fetch-full-installer —-full-installer-version 15.0
