@@ -39,6 +39,7 @@ class LikeController(
                     it.likes,
                     it.image,
                     it.days,
+                    it.description
                 )
             },
         )
@@ -61,7 +62,9 @@ class LikeController(
                     it.image,
                     it.likes,
                     true,
-                    it.sigunguCode
+                    it.sigunguCode,
+                    it.tripThemeConstants,
+
                 )
             },
         )

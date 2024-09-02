@@ -21,6 +21,7 @@ class Lane(
     var isAI: Boolean = false,
     var aiLaneSavedBy: Long? = null,
     val days: Int = 1,
+    val description: String? = null,
 ) : BaseEntity() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -169,6 +169,7 @@ class AILaneService(
                 true,
                 null,
                 request.days,
+                parsedContent.description
             )
 
         val laneMappings =
