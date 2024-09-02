@@ -12,6 +12,7 @@ import com.ggsdh.backend.trip.domain.Lane
 import com.ggsdh.backend.trip.domain.LaneMapping
 import com.ggsdh.backend.trip.infrastructure.LaneMappingRepository
 import com.ggsdh.backend.trip.infrastructure.LaneRepository
+import com.ggsdh.backend.trip.presentation.dto.AILaneResponse
 import com.ggsdh.backend.trip.presentation.dto.AIResponseDto
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpEntity
@@ -197,12 +198,16 @@ class AILaneService(
         val laneResponse = laneService.getSpecificLaneResponse(id, saved.id!!)
 
         return AIResponseDto(
-            parsedContent,
-            laneResponse
-                .groupBy {
-                    it.day
-                },
             saved.id!!,
+            saved.name,
+            saved.description ?: "",
+            laneMappings.groupBy { it.day }.map {
+                AILaneResponse(
+                    it.key.toInt(),
+                    it.value.map { it.tourArea!!.name },
+                    laneResponse
+                )
+            },
         )
     }
 }

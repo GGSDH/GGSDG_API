@@ -52,7 +52,6 @@ class LaneService(
                 .map {
                     LaneSpecificResponse(
                             it.sequence,
-                            it.lane!!.name,
                             TourAreaResponse(
                                     it.tourArea!!.id,
                                     it.tourArea!!.name,
@@ -64,7 +63,6 @@ class LaneService(
                                     it.tourArea!!.sigunguCode,
                                     it.tourArea!!.tripThemeConstants
                             ),
-                            it.day,
                     )
                 }.toList()
     }
