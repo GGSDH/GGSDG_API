@@ -39,7 +39,8 @@ class LikeController(
                     it.likes,
                     it.image,
                     it.days,
-                    it.description
+                    it.description,
+                    true
                 )
             },
         )

@@ -83,6 +83,7 @@ class QLaneRepository(
                     lane.likes,
                     laneMapping.tourArea.image,
                     lane.days,
-                    lane.description
+                    lane.description,
+                    Expressions.asBoolean(false)
             )
 }

@@ -69,6 +69,12 @@ class LaneController(
             @RequestParam sigunguCodes: List<SigunguCode>?
     ): BaseResponse<List<LaneResponses>> {
         val laneResponse = laneService.getThemeLane(id, sigunguCodes)
+
+        val likedByMe = likeService.getAllLikedLaneIdsByMember(id)
+        laneResponse.forEach {
+            it.likedByMe = likedByMe.contains(it.laneId)
+        }
+
         return BaseResponse.success(laneResponse)
     }
 

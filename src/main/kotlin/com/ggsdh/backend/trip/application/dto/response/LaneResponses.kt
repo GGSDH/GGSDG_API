@@ -10,6 +10,7 @@ data class LaneResponses(
     val image: String,
     val days: Int,
     val description: String?,
+    var likedByMe: Boolean,
 )
 
 // softwareupdate —-fetch-full-installer —-full-installer-version 15.0
