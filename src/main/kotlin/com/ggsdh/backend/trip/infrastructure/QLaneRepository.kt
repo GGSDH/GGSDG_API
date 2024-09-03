@@ -41,6 +41,7 @@ class QLaneRepository(
                 .leftJoin(laneMapping)
                 .on(laneMapping.lane.id.eq(lane.id))
                 .where(tripTheme.member.id.eq(id))
+                .where(lane.isAI.eq(false))
 
         if (!sigunguCodes.isNullOrEmpty()) {
             query.where(laneMapping.tourArea.sigunguCode.`in`(sigunguCodes))
