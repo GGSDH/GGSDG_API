@@ -63,6 +63,7 @@ class LaneService(
                                     it.tourArea!!.sigunguCode,
                                     it.tourArea!!.tripThemeConstants
                             ),
+                        it.day
                     )
                 }.toList()
     }
