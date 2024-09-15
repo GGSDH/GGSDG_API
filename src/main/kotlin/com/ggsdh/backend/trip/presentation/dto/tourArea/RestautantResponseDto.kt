@@ -16,6 +16,7 @@ class RestautantResponseDto(
     tripTheme: TripThemeConstants,
     likeCount: Long,
     likedByMe: Boolean,
+    description: String?,
     val menuImage: String?,
     val menuName: String?,
 ) : TourAreaResponseDto(
@@ -32,4 +33,5 @@ class RestautantResponseDto(
         likeCount,
         likedByMe,
         ContentType.RESTAURANT,
+    description,
     )

@@ -17,6 +17,7 @@ class FestivalResponseDto(
     tripTheme: TripThemeConstants,
     likeCount: Long,
     likedByMe: Boolean,
+    description: String?,
     val ageLimit: String?,
     val discountInfo: String?,
     val startDate: LocalDate?,
@@ -39,4 +40,5 @@ class FestivalResponseDto(
         likeCount,
         likedByMe,
         ContentType.FESTIVAL_EVENT,
+        description,
     )

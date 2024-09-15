@@ -24,6 +24,7 @@ class TourismSpot(
     dataCreatedAt: LocalDate,
     ranking: Long?,
     likes: Long,
+    description: String?,
     var grandTourYn: Boolean,
     var associatedGrandTourYn: Boolean,
 ) : TourArea(
@@ -40,6 +41,7 @@ class TourismSpot(
         name,
         ranking,
         likes,
+        description,
         dataModifiedAt,
         dataCreatedAt,
     )

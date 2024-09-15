@@ -16,6 +16,7 @@ class TourismSpotResponseDto(
     tripTheme: TripThemeConstants,
     likeCount: Long,
     likedByMe: Boolean,
+    description: String?,
 ) : TourAreaResponseDto(
         tourAreaId,
         name,
@@ -30,4 +31,5 @@ class TourismSpotResponseDto(
         likeCount,
         likedByMe,
         ContentType.TOURISM_SPOT,
+        description,
     )

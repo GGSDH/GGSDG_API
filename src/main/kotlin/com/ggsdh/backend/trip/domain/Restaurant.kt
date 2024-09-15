@@ -24,6 +24,7 @@ class Restaurant(
     likes: Long,
     dataModifiedAt: LocalDate,
     dataCreatedAt: LocalDate,
+    description: String?,
     var firstMenuImage: String?,
     var firstMenuName: String?,
 ) : TourArea(
@@ -40,6 +41,8 @@ class Restaurant(
         name,
         ranking,
         likes,
+
+        description,
         dataModifiedAt,
         dataCreatedAt,
     )

@@ -24,6 +24,7 @@ class FestivalEvent(
     dataModifiedAt: LocalDate,
     dataCreatedAt: LocalDate,
     likes: Long,
+    description: String?,
     var sponsorName: String?,
     var startDate: LocalDate?,
     var endDate: LocalDate?,
@@ -47,6 +48,8 @@ class FestivalEvent(
         name,
         ranking,
         likes,
+        description,
         dataModifiedAt,
         dataCreatedAt,
+
     )

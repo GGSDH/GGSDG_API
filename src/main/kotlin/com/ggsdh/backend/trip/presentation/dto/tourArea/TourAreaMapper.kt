@@ -21,6 +21,7 @@ fun TourArea.toResponseDto(userLikes: List<Long>): TourAreaResponseDto {
             likedByMe = userLikes.contains(this.id),
             menuImage = this.firstMenuImage,
             menuName = this.firstMenuName,
+            description = this.description,
         )
     } else if (this is FestivalEvent) {
         return FestivalResponseDto(
@@ -44,6 +45,7 @@ fun TourArea.toResponseDto(userLikes: List<Long>): TourAreaResponseDto {
             spendTime = this.spendTimeFestival,
             sponsor = this.sponsorName,
             useTime = this.usetimeFestival,
+            description = this.description,
         )
     } else {
         return TourismSpotResponseDto(
@@ -59,6 +61,7 @@ fun TourArea.toResponseDto(userLikes: List<Long>): TourAreaResponseDto {
             tripTheme = this.tripThemeConstants,
             likeCount = this.likes,
             likedByMe = userLikes.contains(this.id),
+            description = this.description,
         )
     }
 }

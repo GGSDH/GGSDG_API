@@ -17,4 +17,5 @@ open class TourAreaResponseDto(
     val likeCount: Long,
     val likedByMe: Boolean,
     val contentType: ContentType,
+    val description: String?,
 )
