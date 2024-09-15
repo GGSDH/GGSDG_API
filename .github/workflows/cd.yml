@@ -52,4 +52,4 @@ jobs:
             sudo docker pull ${{ secrets.IMAGE_REPO_URL }}
             sudo docker ps -f name=ggsdh-api -q | xargs --no-run-if-empty sudo docker container stop
             sudo docker ps -a -f name=ggsdh-api -q | xargs --no-run-if-empty sudo docker container rm
-            sudo docker run -d --name ggsdh-api -e "TZ=Asia/Seoul" -p 8080:8080 ggsdh/ggsdh-operate
+            sudo docker run -d --log-driver=awslogs --log-opt awslogs-region=ap-northeast-2 --log-opt awslogs-group=ggsdh --name ggsdh-api -e "TZ=Asia/Seoul" -p 8080:8080 ggsdh/ggsdh-operate
