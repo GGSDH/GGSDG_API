@@ -65,7 +65,7 @@ class PhotoBookService(
                 ).join()
         }
 
-        photos.filter {
+        val filteredPhoto = photos.filter {
             it.location?.city == "경기도"
         }
 
@@ -75,7 +75,7 @@ class PhotoBookService(
                 input.title,
                 LocalDateTime.parse(input.startDate, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")),
                 LocalDateTime.parse(input.endDate, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")),
-                photos,
+                filteredPhoto,
             )
         val saved =
             photoBookRepository.save(
