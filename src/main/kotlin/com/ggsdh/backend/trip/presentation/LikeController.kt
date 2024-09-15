@@ -65,6 +65,7 @@ class LikeController(
                     true,
                     it.sigunguCode,
                     it.tripThemeConstants,
+                    it.address1
 
                 )
             },

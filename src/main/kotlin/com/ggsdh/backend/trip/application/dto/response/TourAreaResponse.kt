@@ -14,4 +14,5 @@ data class TourAreaResponse(
         val likedByMe: Boolean,
         val sigunguCode: SigunguCode,
         val tripThemeConstants: TripThemeConstants,
+        val address: String,
 )
