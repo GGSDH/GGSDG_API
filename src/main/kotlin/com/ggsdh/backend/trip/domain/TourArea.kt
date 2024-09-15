@@ -27,6 +27,7 @@ class TourArea(
     var name: String,
     var ranking: Long?,
     var likes: Long = 0,
+    var description: String?,
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     var dataModifiedAt: LocalDate,
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
