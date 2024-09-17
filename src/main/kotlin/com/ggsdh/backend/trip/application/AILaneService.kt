@@ -205,7 +205,9 @@ class AILaneService(
                 AILaneResponse(
                     it.key.toInt(),
                     it.value.map { it.tourArea!!.name },
-                    laneResponse
+                    laneResponse.filter { lane ->
+                        lane.day == it.key.toInt()
+                    }
                 )
             },
         )
