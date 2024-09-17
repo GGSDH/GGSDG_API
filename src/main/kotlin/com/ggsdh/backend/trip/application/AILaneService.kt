@@ -210,6 +210,7 @@ class AILaneService(
                     }
                 )
             },
+            request.sigunguCode,
         )
     }
 }
