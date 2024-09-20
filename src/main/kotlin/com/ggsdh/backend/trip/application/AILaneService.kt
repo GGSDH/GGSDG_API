@@ -10,6 +10,7 @@ import com.ggsdh.backend.trip.application.dto.response.ChatCompletionResponse
 import com.ggsdh.backend.trip.application.dto.response.ParsedContent
 import com.ggsdh.backend.trip.domain.Lane
 import com.ggsdh.backend.trip.domain.LaneMapping
+import com.ggsdh.backend.trip.domain.constants.TripThemeConstants
 import com.ggsdh.backend.trip.infrastructure.LaneMappingRepository
 import com.ggsdh.backend.trip.infrastructure.LaneRepository
 import com.ggsdh.backend.trip.presentation.dto.AILaneResponse
@@ -165,7 +166,7 @@ class AILaneService(
         val lane =
             Lane(
                 parsedContent.title,
-                aiTourData.first().tripThemeConstants,
+                request.tripThemeConstants.firstOrNull() ?: TripThemeConstants.CULTURE,
                 0,
                 true,
                 null,
