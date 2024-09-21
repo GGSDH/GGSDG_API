@@ -89,6 +89,7 @@ class TourAreaController(
             @RequestBody request: TourAreaSearchRequest,
             pageable: Pageable
     ): BaseResponse<Page<TourAreaResponseDto>> {
+
         val tourAreas = tourAreaService.search(request, pageable)
         val likes = likeService.getAllLikedTourAreaIdsByMember(memberId)
 

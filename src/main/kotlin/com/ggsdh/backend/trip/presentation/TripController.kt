@@ -43,6 +43,9 @@ class TripController(
 
     @PostMapping("/trip/search")
     fun getSearchResponse(@RequestBody keywordRequest: KeywordRequest): BaseResponse<List<SearchedResponse>> {
+        if(keywordRequest.keyword.isEmpty()) {
+            return BaseResponse.success(emptyList())
+        }
         val result = tripSearchService.searchByKeyword(keywordRequest.keyword)
         return BaseResponse.success(result)
     }
