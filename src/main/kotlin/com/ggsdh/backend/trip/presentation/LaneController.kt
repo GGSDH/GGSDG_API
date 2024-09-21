@@ -58,7 +58,7 @@ class LaneController(
                         lane.image,
                         lane.tripThemeConstants,
                         specificLaneResponse,
-                        null
+                        lane.description
                 ),
         )
     }
