@@ -20,10 +20,7 @@ class PhotoBook(
     }
 
     fun getDailyPhotoGroups(): List<DailyPhotoGroup> {
-        val map: MutableMap<
-                String,
-                MutableMap<String, MutableList<Photo>>,
-                > = mutableMapOf()
+        val map = mutableMapOf<String, MutableMap<String, MutableList<Photo>>>()
 
         this.photos
             .sortedBy {

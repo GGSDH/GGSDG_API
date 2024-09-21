@@ -43,26 +43,22 @@ class PhotoBookService(
         input: CreatePhotobookRequest,
     ): PhotoBook {
         val photos: MutableList<Photo> = mutableListOf()
-        val chunkSize = 10
+        val chunkSize = 30
         val photoChunks = input.photos.chunked(chunkSize)
 
-        photoChunks.forEach { chunk ->
-            CompletableFuture
-                .allOf(
-                    *chunk
-                        .map { photo ->
-                            naverGcService.getLocation(photo.toGetLocationInputDto()).thenApply {
-                                photos.add(
-                                    Photo(
-                                        id = UUID.randomUUID().toString(),
-                                        path = photo.path,
-                                        location = it,
-                                        dateTime = photo.toGetLocationInputDto().date,
-                                    ),
-                                )
-                            }
-                        }.toTypedArray(),
-                ).join()
+        photoChunks.parallelStream().forEach { chunk ->
+            chunk.forEach { photo ->
+                naverGcService.getLocation(photo.toGetLocationInputDto()).thenApply {
+                    photos.add(
+                        Photo(
+                            id = UUID.randomUUID().toString(),
+                            path = photo.path,
+                            location = it,
+                            dateTime = photo.toGetLocationInputDto().date,
+                        ),
+                    )
+                }
+            }
         }
 
         val filteredPhoto = photos.filter {
@@ -95,8 +91,6 @@ class PhotoBookService(
         memberId: Long,
     ): PhotoBook? {
         val photoBooks = photoBookRepository.getAllPhotobookWithoutPhototicket(memberId)
-
-        println(photoBooks)
         return photoBooks.randomOrNull()
     }
 }

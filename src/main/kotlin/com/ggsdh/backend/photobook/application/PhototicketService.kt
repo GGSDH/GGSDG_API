@@ -16,7 +16,6 @@ class PhototicketService(
     private val photoBookService: PhotoBookService,
     private val photoBookRepository: PhotoBookRepository,
     private val photoRepository: JpaPhotoRepository,
-    private val photoBookJpaRepository: JpaPhotoBookRepository
 ) {
     fun getAllPhototicketsByMemberId(memberId: Long): List<PhotoTicketResponse> {
         return photoBookRepository.getAllPhototickets(memberId)

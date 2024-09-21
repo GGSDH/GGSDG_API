@@ -1,12 +1,13 @@
 package com.ggsdh.backend.photobook.domain
 
+import java.io.Serializable
 import java.time.LocalDateTime
 
 // 2024-08-09 23:38:21.000
 class HourlyPhotoGroup(
     val dateTime: LocalDateTime,
     val photos: List<Photo>,
-) {
+): Serializable {
     fun getPhotosCount(): Number = photos.size
 
     fun getLocalizedTime(): String {

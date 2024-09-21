@@ -1,6 +1,7 @@
 package com.ggsdh.backend.trip.application
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import com.ggsdh.backend.trip.application.dto.request.AIRequest
 import com.ggsdh.backend.trip.application.dto.request.AIRequestMessage
 import com.ggsdh.backend.trip.application.dto.request.AITourArea
@@ -15,6 +16,7 @@ import com.ggsdh.backend.trip.infrastructure.LaneMappingRepository
 import com.ggsdh.backend.trip.infrastructure.LaneRepository
 import com.ggsdh.backend.trip.presentation.dto.AILaneResponse
 import com.ggsdh.backend.trip.presentation.dto.AIResponseDto
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
@@ -33,6 +35,7 @@ class AILaneService(
     private val openaiApiKey: String,
     private val laneService: LaneService,
 ) {
+    val logger = LoggerFactory.getLogger(this::class.java)
     fun generateAILane(
         id: Long,
         request: AIUserRequest,
@@ -78,7 +81,7 @@ class AILaneService(
                     ),
                     AIRequestMessage("user", objectMapper.writeValueAsString(aiUserMessage)),
                 ),
-                objectMapper.readValue(
+                objectMapper.readValue<Map<String, Any>>(
                     """
                                 {
                         "type": "json_schema",
@@ -126,8 +129,7 @@ class AILaneService(
                         }
                     }
                     """.trimIndent(),
-                    Map::class.java,
-                ) as Map<String, Any>,
+                ),
             )
 
         val entity =
@@ -155,13 +157,12 @@ class AILaneService(
                 ?.message
                 ?.content ?: throw Exception("No content")
 
+        logger.info(data)
         val parsedContent =
             objectMapper.readValue(
                 data,
                 ParsedContent::class.java,
             )
-
-        println(parsedContent)
 
         val lane =
             Lane(
