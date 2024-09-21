@@ -6,6 +6,7 @@ import com.ggsdh.backend.photobook.domain.Photo
 import com.ggsdh.backend.photobook.domain.PhotoBook
 import com.ggsdh.backend.photobook.domain.PhotoBookRepository
 import com.ggsdh.backend.photobook.presentation.dto.CreatePhotobookRequest
+import com.ggsdh.backend.trip.exception.TripError
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Component
 import java.time.LocalDateTime
@@ -73,6 +74,10 @@ class PhotoBookService(
                 LocalDateTime.parse(input.endDate, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")),
                 filteredPhoto,
             )
+
+        if(photoBook.photos.isEmpty()) {
+            throw BusinessException(TripError.EMPTY_PHOTOBOOK)
+        }
         val saved =
             photoBookRepository.save(
                 memberId,
