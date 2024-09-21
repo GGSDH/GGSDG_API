@@ -17,12 +17,12 @@ class LikeService(
 ) {
     fun getAllLikedTourAreaIdsByMember(memberId: Long): List<Long> {
         val likes = likeRepository.findAllByMemberId(memberId)
-        return likes.filter { it.tourAreaId != null }.map { it.tourAreaId!! }
+        return likes.sortedByDescending { it.id }.filter { it.tourAreaId != null }.map { it.tourAreaId!! }
     }
 
     fun getAllLikedLaneIdsByMember(memberId: Long): List<Long> {
         val likes = likeRepository.findAllByMemberId(memberId)
-        return likes.filter { it.laneId != null }.map { it.laneId!! }
+        return likes.sortedByDescending { it.id }.filter { it.laneId != null }.map { it.laneId!! }
     }
 
     @Transactional
