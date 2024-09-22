@@ -11,4 +11,5 @@ class LaneResponse(
     val tripThemeConstants: TripThemeConstants,
     val laneSpecificResponses: List<LaneSpecificResponse>,
     val laneDescription: String?,
+    val likedByMe: Boolean,
 )

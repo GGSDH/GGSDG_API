@@ -50,6 +50,8 @@ class LaneController(
     ): BaseResponse<LaneResponse> {
         val lane = laneService.findLaneById(laneId) ?: throw BusinessException(GlobalError.GLOBAL_NOT_FOUND)
         val specificLaneResponse = laneService.getSpecificLaneResponse(id, laneId)
+
+        val likedByMe = likeService.getAllLikedLaneIdsByMember(id)
         return BaseResponse.success(
                 LaneResponse(
                         lane.laneId,
@@ -58,7 +60,8 @@ class LaneController(
                         lane.image,
                         lane.tripThemeConstants,
                         specificLaneResponse,
-                        lane.description
+                        lane.description,
+                        likedByMe.contains(lane.laneId),
                 ),
         )
     }
