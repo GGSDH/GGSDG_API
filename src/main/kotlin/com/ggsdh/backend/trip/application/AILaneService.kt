@@ -61,39 +61,45 @@ class AILaneService(
     fun buildRoute(laneMappings: List<LaneMapping>): List<LaneMapping> {
         if (laneMappings.isEmpty()) return emptyList()
 
-        val remaining = laneMappings.toMutableList()
-        val route = mutableListOf<LaneMapping>()
+        val routeAll = mutableListOf<LaneMapping>()
+        laneMappings.groupBy { it.day }.forEach { (_, dayLaneMappings) ->
+            val remaining = dayLaneMappings.toMutableList()
+            val route = mutableListOf<LaneMapping>()
+            // Start from the first laneMapping
+            var current = remaining.removeAt(0)
+            route.add(current)
 
-        // Start from the first laneMapping
-        var current = remaining.removeAt(0)
-        route.add(current)
-
-        while (remaining.isNotEmpty()) {
-            val currentPosition = Position(
-                current.tourArea?.latitude ?: 0.0,
-                current.tourArea?.longitude ?: 0.0
-            )
-
-            // Find the closest unvisited laneMapping
-            val next = remaining.minByOrNull { lm ->
-                val position = Position(
-                    lm.tourArea?.latitude ?: 0.0,
-                    lm.tourArea?.longitude ?: 0.0
+            while (remaining.isNotEmpty()) {
+                val currentPosition = Position(
+                    current.tourArea?.latitude ?: 0.0,
+                    current.tourArea?.longitude ?: 0.0
                 )
-                distance(currentPosition, position)
-            } ?: break
 
-            remaining.remove(next)
-            route.add(next)
-            current = next
+                // Find the closest unvisited laneMapping
+                val next = remaining.minByOrNull { lm ->
+                    val position = Position(
+                        lm.tourArea?.latitude ?: 0.0,
+                        lm.tourArea?.longitude ?: 0.0
+                    )
+                    distance(currentPosition, position)
+                } ?: break
+
+                remaining.remove(next)
+                route.add(next)
+                current = next
+            }
+
+            val newRoute = route.mapIndexed { index, laneMapping ->
+                laneMapping.sequence = (index+1).toLong()
+
+                laneMapping
+            }
+
+
+            routeAll.addAll(newRoute)
         }
 
-        // Update the sequence numbers based on the new order
-        route.forEachIndexed { index, laneMapping ->
-            laneMapping.sequence = (index + 1).toLong()
-        }
-
-        return route
+        return routeAll
     }
 
     fun generateAILane(
