@@ -58,7 +58,7 @@ class PhotoBookService(
                             dateTime = photo.toGetLocationInputDto().date,
                         ),
                     )
-                }
+                }.join()
             }
         }
 
