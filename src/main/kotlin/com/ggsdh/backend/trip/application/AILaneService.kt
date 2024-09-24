@@ -25,6 +25,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
 import kotlin.math.pow
+import kotlin.math.sqrt
 
 data class Position(val latitude: Double, val longitude: Double)
 
