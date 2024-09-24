@@ -73,7 +73,7 @@ class PhotoBookRepositoryImpl(
     override fun getAllByMemberId(memberId: Long): List<PhotoBook> {
         val entities = jpaPhotoBookRepository.findAllByMemberId(memberId)
 
-        val photos = jpaPhotoRepository.findFirstByPhotobookIdIn(entities.map { it.id })
+        val photos = jpaPhotoRepository.findAllByPhotobookIdIn(entities.map { it.id })
             .groupBy { it.photobookId }
             .mapValues { it.value.map { photo -> photo.toDomain() } }
 

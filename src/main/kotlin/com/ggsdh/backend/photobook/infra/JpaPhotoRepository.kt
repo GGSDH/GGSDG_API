@@ -7,6 +7,6 @@ interface JpaPhotoRepository : JpaRepository<PhotoEntity, String> {
     fun findAllByPhotobookId(photobookId: Long): List<PhotoEntity>
 
     fun findFirstByPhotobookId(photobookId: Long): PhotoEntity?
-    fun findFirstByPhotobookIdIn(photobookIds: List<Long>): List<PhotoEntity>
+    fun findAllByPhotobookIdIn(photobookIds: List<Long>): List<PhotoEntity>
     fun findAllByPhotobookIdAndIsPhototicket(photobookId: Long, isPhototicket: Boolean): List<PhotoEntity>
 }
