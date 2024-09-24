@@ -25,7 +25,6 @@ import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
 import kotlin.math.pow
-import kotlin.math.sqrt
 
 data class Position(val latitude: Double, val longitude: Double)
 
@@ -257,10 +256,12 @@ class AILaneService(
                     }
             }
 
+        val rebuiltRoute = buildRoute(laneMappings)
+
 
 
         val saved = laneRepository.save(lane)
-        laneMappingRepository.saveAll(laneMappings)
+        laneMappingRepository.saveAll(rebuiltRoute)
 
         val laneResponse = laneService.getSpecificLaneResponse(id, saved.id!!)
 
