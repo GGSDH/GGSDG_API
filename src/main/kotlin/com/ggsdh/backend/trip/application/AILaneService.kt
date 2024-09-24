@@ -270,7 +270,7 @@ class AILaneService(
             saved.id!!,
             saved.name,
             saved.description ?: "",
-            laneMappings.groupBy { it.day }.map {
+            rebuiltRoute.groupBy { it.day }.map {
                 AILaneResponse(
                     it.key.toInt(),
                     it.value.map { it.tourArea!!.name },
