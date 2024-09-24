@@ -24,6 +24,11 @@ import org.springframework.http.HttpMethod
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
+import kotlin.math.pow
+import kotlin.math.sqrt
+
+data class Position(val latitude: Double, val longitude: Double)
+
 
 @Service
 class AILaneService(
@@ -36,6 +41,61 @@ class AILaneService(
     private val laneService: LaneService,
 ) {
     val logger = LoggerFactory.getLogger(this::class.java)
+    // Function to compute the distance between two positions using the Haversine formula
+    fun distance(p1: Position, p2: Position): Double {
+        val R = 6371e3 // Earth's radius in meters
+        val phi1 = Math.toRadians(p1.latitude)
+        val phi2 = Math.toRadians(p2.latitude)
+        val deltaPhi = Math.toRadians(p2.latitude - p1.latitude)
+        val deltaLambda = Math.toRadians(p2.longitude - p1.longitude)
+
+        val a = Math.sin(deltaPhi / 2).pow(2.0) +
+                Math.cos(phi1) * Math.cos(phi2) *
+                Math.sin(deltaLambda / 2).pow(2.0)
+        val c = 2 * Math.atan2(sqrt(a), sqrt(1 - a))
+
+        return R * c
+    }
+
+    // Function to build a route by ordering laneMappings based on proximity
+    fun buildRoute(laneMappings: List<LaneMapping>): List<LaneMapping> {
+        if (laneMappings.isEmpty()) return emptyList()
+
+        val remaining = laneMappings.toMutableList()
+        val route = mutableListOf<LaneMapping>()
+
+        // Start from the first laneMapping
+        var current = remaining.removeAt(0)
+        route.add(current)
+
+        while (remaining.isNotEmpty()) {
+            val currentPosition = Position(
+                current.tourArea?.latitude ?: 0.0,
+                current.tourArea?.longitude ?: 0.0
+            )
+
+            // Find the closest unvisited laneMapping
+            val next = remaining.minByOrNull { lm ->
+                val position = Position(
+                    lm.tourArea?.latitude ?: 0.0,
+                    lm.tourArea?.longitude ?: 0.0
+                )
+                distance(currentPosition, position)
+            } ?: break
+
+            remaining.remove(next)
+            route.add(next)
+            current = next
+        }
+
+        // Update the sequence numbers based on the new order
+        route.forEachIndexed { index, laneMapping ->
+            laneMapping.sequence = (index + 1).toLong()
+        }
+
+        return route
+    }
+
     fun generateAILane(
         id: Long,
         request: AIUserRequest,
@@ -164,6 +224,8 @@ class AILaneService(
                 ParsedContent::class.java,
             )
 
+
+
         val lane =
             Lane(
                 parsedContent.title,
@@ -175,24 +237,27 @@ class AILaneService(
                 parsedContent.description
             )
 
-        val laneMappings =
-            parsedContent.days
-                .flatMap { dayPlan ->
-                    dayPlan.tripAreaNames
-                        .map {
-                            it to dayPlan.day
-                        }.mapIndexedNotNull { index, dayPlan ->
-                            val laneMapping = LaneMapping()
-                            laneMapping.sequence = (index + 1).toLong()
-                            laneMapping.lane = lane
-                            laneMapping.tourArea = tourAreas.firstOrNull { it.name == dayPlan.first }
-                            laneMapping.day = dayPlan.second
-                            if (laneMapping.tourArea == null) {
-                                return@mapIndexedNotNull null
-                            }
-                            laneMapping
+
+
+        // Your original code to build laneMappings
+        val laneMappings = parsedContent.days
+            .flatMap { dayPlan ->
+                dayPlan.tripAreaNames
+                    .map { it to dayPlan.day }
+                    .mapIndexedNotNull { index, dayPlan ->
+                        val laneMapping = LaneMapping()
+                        laneMapping.sequence = (index + 1).toLong()
+                        laneMapping.lane = lane
+                        laneMapping.tourArea = tourAreas.firstOrNull { it.name == dayPlan.first }
+                        laneMapping.day = dayPlan.second
+                        if (laneMapping.tourArea == null) {
+                            return@mapIndexedNotNull null
                         }
-                }
+                        laneMapping
+                    }
+            }
+
+
 
         val saved = laneRepository.save(lane)
         laneMappingRepository.saveAll(laneMappings)
