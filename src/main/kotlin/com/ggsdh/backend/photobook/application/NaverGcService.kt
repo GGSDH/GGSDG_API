@@ -36,6 +36,7 @@ class NaverGcService(
                 val body = it.responseBody
                 val response = objectMapper.readValue<ApiResponse>(body)
 
+
                 if (response.status.code == 3) {
                     return@thenApply null
                 }

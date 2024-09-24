@@ -44,11 +44,11 @@ class PhotoBookService(
         input: CreatePhotobookRequest,
     ): PhotoBook {
         val photos: MutableList<Photo> = mutableListOf()
-        val chunkSize = 30
+        val chunkSize = 20
         val photoChunks = input.photos.chunked(chunkSize)
 
-        photoChunks.parallelStream().forEach { chunk ->
-            chunk.forEach { photo ->
+        photoChunks.forEach { chunk ->
+            chunk.parallelStream().forEach { photo ->
                 naverGcService.getLocation(photo.toGetLocationInputDto()).thenApply {
                     photos.add(
                         Photo(
@@ -63,7 +63,7 @@ class PhotoBookService(
         }
 
         val filteredPhoto = photos.filter {
-            it.location?.city == "경기도"
+            it.location?.city == "경기도" || it.location?.city?.contains("경기") == true
         }
 
         val photoBook =
