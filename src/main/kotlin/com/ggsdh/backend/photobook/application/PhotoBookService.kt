@@ -44,7 +44,7 @@ class PhotoBookService(
         input: CreatePhotobookRequest,
     ): PhotoBook {
         val photos: MutableList<Photo> = mutableListOf()
-        val chunkSize = 20
+        val chunkSize = 30
         val photoChunks = input.photos.chunked(chunkSize)
 
         photoChunks.forEach { chunk ->
@@ -66,6 +66,7 @@ class PhotoBookService(
             it.location?.city == "경기도" || it.location?.city?.contains("경기") == true
         }
 
+        println("filteredPhoto: $filteredPhoto")
         val photoBook =
             PhotoBook.create(
                 id = -1,

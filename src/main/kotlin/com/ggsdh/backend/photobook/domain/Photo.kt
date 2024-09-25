@@ -3,7 +3,7 @@ package com.ggsdh.backend.photobook.domain
 import java.time.LocalDateTime
 import java.util.UUID
 
-class Photo(
+data class Photo(
     val id: String,
     val path: String,
     val location: Location?,
