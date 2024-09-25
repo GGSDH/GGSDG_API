@@ -44,7 +44,7 @@ class PhotoBookService(
         input: CreatePhotobookRequest,
     ): PhotoBook {
         val photos: MutableList<Photo> = mutableListOf()
-        val chunkSize = 30
+        val chunkSize = 10
         val photoChunks = input.photos.chunked(chunkSize)
 
         photoChunks.forEach { chunk ->
@@ -58,6 +58,10 @@ class PhotoBookService(
                             dateTime = photo.toGetLocationInputDto().date,
                         ),
                     )
+                }.exceptionally {
+                    println(it)
+
+                    null
                 }.join()
             }
         }
