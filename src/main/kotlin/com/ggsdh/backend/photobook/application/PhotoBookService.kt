@@ -44,7 +44,7 @@ class PhotoBookService(
         input: CreatePhotobookRequest,
     ): PhotoBook {
         val photos: MutableList<Photo> = mutableListOf()
-        val chunkSize = 10
+        val chunkSize = 50
         val photoChunks = input.photos.chunked(chunkSize)
 
         photoChunks.forEach { chunk ->
