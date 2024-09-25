@@ -66,6 +66,7 @@ class PhotoBookService(
             }
         }
 
+        println("photo: ${input.photos}")
         val filteredPhoto = photos.filter {
             it.location?.city == "경기도" || it.location?.city?.contains("경기") == true
         }
