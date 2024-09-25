@@ -15,7 +15,7 @@ data class Result(
     val name: String,
     val code: Code,
     val region: Region,
-    val land: Land,
+    val land: Land?,
 )
 
 data class Code(

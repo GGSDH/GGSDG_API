@@ -27,7 +27,7 @@ class NaverGcService(
 
         return asyncHttpClient
             .prepareGet(
-                "https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc?coords=${input.lon},${input.lat}&output=json&orders=roadaddr",
+                "https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc?coords=${input.lon},${input.lat}&output=json&orders=legalcode,roadaddr",
             ).setHeader("X-NCP-APIGW-API-KEY", clientSecret)
             .setHeader("X-NCP-APIGW-API-KEY-ID", clientId)
             .execute()
@@ -41,9 +41,21 @@ class NaverGcService(
                     return@thenApply null
                 }
 
+                if(response.results.size == 1) {
+                    val city =
+                        response.results[0]
+                            .region.area1.name
+
+                    val roadName =
+                        response.results[0]
+                            .region.area4.name
+
+                    return@thenApply Location(input.lat, input.lon, "$roadName 근처 어딘가", city)
+                }
+
                 val buildingName =
-                    response.results[0]
-                        .land.addition0.value
+                    response.results[1]
+                        .land?.addition0?.value ?: ""
 
                 val city =
                     response.results[0]
@@ -52,7 +64,7 @@ class NaverGcService(
                 if (buildingName == "") {
                     val roadName =
                         response.results[0]
-                            .land.name
+                            .land?.name
                     return@thenApply Location(input.lat, input.lon, "$roadName 근처 어딘가", city)
                 } else {
                     return@thenApply Location(input.lat, input.lon, buildingName, city)
