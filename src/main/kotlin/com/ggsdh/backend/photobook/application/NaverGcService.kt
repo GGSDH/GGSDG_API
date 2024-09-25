@@ -63,8 +63,9 @@ class NaverGcService(
 
                 if (buildingName == "") {
                     val roadName =
-                        response.results[0]
-                            .land?.name
+                        response.results[1]
+                            .land?.name ?: response.results[0]
+                            .region.area4.name
                     return@thenApply Location(input.lat, input.lon, "$roadName 근처 어딘가", city)
                 } else {
                     return@thenApply Location(input.lat, input.lon, buildingName, city)
