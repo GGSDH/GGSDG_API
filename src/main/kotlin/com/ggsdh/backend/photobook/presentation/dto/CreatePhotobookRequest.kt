@@ -4,7 +4,7 @@ import com.ggsdh.backend.photobook.application.dto.GetLocationInputDto
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class CreatePhotobookRequestPhoto(
+data class CreatePhotobookRequestPhoto(
     val path: String,
     val latitude: Double,
     val longitude: Double,
@@ -19,7 +19,7 @@ class CreatePhotobookRequestPhoto(
         )
 }
 
-class CreatePhotobookRequest(
+data class CreatePhotobookRequest(
     val title: String,
     val startDate: String,
     val endDate: String,
