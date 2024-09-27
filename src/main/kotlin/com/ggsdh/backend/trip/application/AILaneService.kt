@@ -115,7 +115,7 @@ class AILaneService(
                     request.sigunguCode,
                 ).filter {
                     it.tripThemeConstants in request.tripThemeConstants
-                }
+                }.shuffled().take(60)
 
         val aiTourData =
             tourAreas.map {
