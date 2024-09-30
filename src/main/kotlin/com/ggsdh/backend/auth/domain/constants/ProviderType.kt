@@ -6,8 +6,7 @@ import com.ggsdh.backend.global.security.exception.AuthError
 enum class ProviderType(val provider: String) {
     KAKAO("kakao"),
     APPLE("apple"),
-    DUMMY("dummy"),
-    PASSWORD("password")
+    DUMMY("dummy")
     ;
 
     companion object {

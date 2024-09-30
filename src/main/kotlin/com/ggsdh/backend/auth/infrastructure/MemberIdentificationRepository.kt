@@ -20,11 +20,6 @@ class MemberIdentificationRepository(
                     memberIdentification.sub!!,
                 )
 
-            ProviderType.PASSWORD ->
-                memberIdentificationJpaRepository.findBySub(
-                    memberIdentification.sub!!,
-                )
-
             ProviderType.DUMMY -> TODO()
         }?.member
 }
